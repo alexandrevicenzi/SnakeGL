@@ -10,19 +10,28 @@
     #include <GL/glut.h>
 #endif
 
-using namespace std;
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
+
+using namespace std;
+
+// Key mappings.
+#define KEY_ESCAPE 27
+#define KEY_SPACE  32
+
+// Y axis difference. Ground to Objects.
+#define DIFF       0.25f
+// Objects can navigate from -5.0f to 5.0f.
+#define BOARD_SIZE 5.25f
+
 
 int width  = 400,//320,
     height = 400;//240;
 
-#define KEY_ESCAPE 27
-#define KEY_SPACE  32
-
 struct Point
 {
-    float x, y;
+    float x, y, z;
 };
 
 int camera_mode = 0;
@@ -33,6 +42,7 @@ double xUp = 0.0f, yUp = 1.0f, zUp = 0.0f;
 
 float corRed[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
+vector<Point> obstacles;
 Point pball;
 
 void change_ball_pos();
@@ -121,10 +131,10 @@ void draw_board()
         glColor3f(0.0f, 1.0f, 0.0f);
         glNormal3f(0.0, 1.0, 0.0);
 
-        glVertex3f(-5.0f, 0.0f, 5.0f);
-        glVertex3f(5.0f, 0.0f,  5.0f);
-        glVertex3f(5.0f, 0.0f,  -5.0f);
-        glVertex3f(-5.0f, 0.0f, -5.0f);
+        glVertex3f(-BOARD_SIZE, 0.0f,  BOARD_SIZE);
+        glVertex3f( BOARD_SIZE, 0.0f,  BOARD_SIZE);
+        glVertex3f( BOARD_SIZE, 0.0f, -BOARD_SIZE);
+        glVertex3f(-BOARD_SIZE, 0.0f, -BOARD_SIZE);
     glEnd();
 }
 
@@ -133,13 +143,13 @@ void draw_snake()
     glColor3f(0.0, 0.0, 1.0);
     //glutSolidSphere(1.0f, 100.0f, 100.0f);
     glPushMatrix();
-        glTranslatef(0.5f, 0.5f, 0.0f);
+        glTranslatef(0.5f, DIFF, 0.0f);
         glutSolidCube(0.5f);
     glPopMatrix();
 
     glColor3f(0.0, 1.0, 0.4);
     glPushMatrix();
-        glTranslatef(1.0f, 0.5f, 0.0f);
+        glTranslatef(1.0f, DIFF, 0.0f);
         glutSolidCube(0.5f);
     glPopMatrix();
 }
@@ -148,10 +158,25 @@ void draw_ball()
 {
     glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
-        glTranslatef(pball.x, 0.5f, pball.y);
+        glTranslatef(pball.x, pball.y, pball.z);
         //glutSolidSphere(0.5f, 100.0f, 100.0f);
         glutSolidCube(0.5f);
     glPopMatrix();
+}
+
+void draw_obstacles()
+{
+    //for (std::vector<Point>::iterator it = obstacles.begin() ; it != obstacles.end(); ++it)
+    for (size_t i = 0; i < obstacles.size(); ++i)
+    {
+        Point p = obstacles.at(i);
+        //Point p = *it;
+        glColor3f(0.6, 0.4, 0.4);
+        glPushMatrix();
+            glTranslatef(p.x, p.y, p.z);
+            glutSolidCube(0.5f);
+        glPopMatrix();
+    }
 }
 
 void draw_cube(float xS, float yS, float zS)
@@ -169,12 +194,20 @@ void draw_cube(float xS, float yS, float zS)
 
 void change_ball_pos()
 {
-    pball.x = (rand() % 20 / 2.0f) - 5.0;
-    pball.y = (rand() % 20 / 2.0f) - 5.0;
+    pball.x = (rand() % 20 / 2.0f) - 5.0f;
+    pball.y = DIFF;
+    pball.z = (rand() % 20 / 2.0f) - 5.0f;
 }
 
 void init()
 {
+    Point p;
+    p.x = (rand() % 20 / 2.0f) - 5.0f;
+    p.y = DIFF;
+    p.z = (rand() % 20 / 2.0f) - 5.0f;
+
+    obstacles.push_back(p);
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     change_ball_pos();
@@ -221,6 +254,7 @@ void display()
 #endif
 
     draw_board();
+    draw_obstacles();
     draw_ball();
     draw_snake();
 
