@@ -12,18 +12,18 @@
 
 using namespace std;
 #include <iostream>
+#include <stdlib.h>
 
 int width  = 400,//320,
     height = 400;//240;
 
-#if defined(DEBUG)
-    #define DEBUG_MODE 1
-#else
-    #define DEBUG_MODE 0
-#endif
-
 #define KEY_ESCAPE 27
 #define KEY_SPACE  32
+
+struct Point
+{
+    float x, y;
+};
 
 int camera_mode = 0;
 
@@ -32,6 +32,10 @@ double xCenter, yCenter, zCenter;
 double xUp = 0.0f, yUp = 1.0f, zUp = 0.0f;
 
 float corRed[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+Point pball;
+
+void change_ball_pos();
 
 void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 {
@@ -42,10 +46,15 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
         break;
         case KEY_SPACE:
             camera_mode += 1;
-            if (camera_mode > 1)
+            if (camera_mode > 3)
             {
                 camera_mode = 0;
             }
+            glutPostRedisplay();
+        break;
+        case 'B':
+        case 'b':
+            change_ball_pos();
             glutPostRedisplay();
         break;
     }
@@ -56,16 +65,27 @@ void set_camera()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //gluPerspective(60, 1, 0.1, 100);
-    gluPerspective(45, 1, 0.1f, 50);
     //gluLookAt(xEye, yEye, zEye, xCenter, yCenter, zCenter, xUp, yUp, zUp);
 
     if (camera_mode == 0)
     {
+        gluPerspective(45, 1, 0.1f, 50);
         gluLookAt(0.0f, 1.0f, 20.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
     }
     else if (camera_mode == 1)
     {
+        gluPerspective(45, 1, 0.1f, 50);
         gluLookAt(0.0f, 10.0f, 15.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+    }
+    else if (camera_mode == 2)
+    {
+        gluPerspective(45, 1, 0.1f, 50);
+        gluLookAt(0.0f, -10.0f, 15.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+    }
+    else if (camera_mode == 3)
+    {
+        gluPerspective(20, 1, 1, 100);
+        gluLookAt(0.0f, 45.0f, 1.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
     }
 
     glMatrixMode(GL_MODELVIEW);
@@ -113,13 +133,13 @@ void draw_snake()
     glColor3f(0.0, 0.0, 1.0);
     //glutSolidSphere(1.0f, 100.0f, 100.0f);
     glPushMatrix();
-        glTranslatef(1.0f, 0.5f, 0.0f);
+        glTranslatef(0.5f, 0.5f, 0.0f);
         glutSolidCube(0.5f);
     glPopMatrix();
 
     glColor3f(0.0, 1.0, 0.4);
     glPushMatrix();
-        glTranslatef(2.0f, 0.5f, 0.0f);
+        glTranslatef(1.0f, 0.5f, 0.0f);
         glutSolidCube(0.5f);
     glPopMatrix();
 }
@@ -127,8 +147,11 @@ void draw_snake()
 void draw_ball()
 {
     glColor3f(1.0, 0.0, 0.0);
-    //glutSolidSphere(1.0f, 100.0f, 100.0f);
-    glutSolidCube(1.0f);
+    glPushMatrix();
+        glTranslatef(pball.x, 0.5f, pball.y);
+        //glutSolidSphere(0.5f, 100.0f, 100.0f);
+        glutSolidCube(0.5f);
+    glPopMatrix();
 }
 
 void draw_cube(float xS, float yS, float zS)
@@ -144,9 +167,18 @@ void draw_cube(float xS, float yS, float zS)
     glDisable(GL_LIGHTING);
 }
 
+void change_ball_pos()
+{
+    pball.x = (rand() % 20 / 2.0f) - 5.0;
+    pball.y = (rand() % 20 / 2.0f) - 5.0;
+}
+
 void init()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    change_ball_pos();
+
     xEye = 20.0f;
     yEye = 20.0f;
     zEye = 20.0f;
@@ -158,7 +190,12 @@ void init()
     glLightfv(GL_LIGHT0, GL_POSITION, posLight);
     glEnable(GL_LIGHT0);
 
+#ifdef DEBUG
+    glDisable(GL_CULL_FACE);
+#else
     glEnable(GL_CULL_FACE);
+#endif
+
     glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_LIGHT0);
@@ -171,25 +208,32 @@ void init()
 
 void display()
 {
-    /*glViewport(0.0, 0.0, width, height);
+    /*glViewport(width / 4, height / 4, 200, 200);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();*/
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     set_camera();
 
-    if (DEBUG_MODE)
-    {
-        draw_axis();
-    }
+#ifdef DEBUG
+    draw_axis();
+#endif
 
     draw_board();
-    //draw_ball();
+    draw_ball();
     draw_snake();
 
 
     //glFlush();
     glutSwapBuffers();
+}
+
+void resize(int w, int h)
+{
+    /*glViewport(0.0f, 0.0f, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();*/
 }
 
 int main(int argc, char** argv)
@@ -202,7 +246,7 @@ int main(int argc, char** argv)
     glutCreateWindow("SnakeGL");
     glutDisplayFunc(display);
     glutIdleFunc(display);
-    //glutReshapeFunc(resize);
+    glutReshapeFunc(resize);
     glutKeyboardFunc(keyboard);
     init();
     glutMainLoop();
