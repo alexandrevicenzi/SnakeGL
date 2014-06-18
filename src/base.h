@@ -1,7 +1,7 @@
 #if defined(__APPLE__) || defined(MACOSX)
     #include <OpenGL/gl.h>
     #include <GLUT/glut.h>
-#elif defined(WIN32)
+#elif defined(_WIN32) || defined(WIN32)
     #include <windows.h>
     #include <GL/gl.h>
     #include <GL/glut.h>

@@ -5,9 +5,10 @@
 
 #include "scenario.cpp"
 
-
-#include <unistd.h>
-#include <signal.h>
+#ifndef _WIN32
+    #include <unistd.h>
+    #include <signal.h>
+#endif
 
 // Key mappings.
 #define KEY_ESCAPE 27
@@ -30,16 +31,27 @@ void keyboard(unsigned char key, int x, int y)
             scenario.change_camera_pos();
             glutPostRedisplay();
         break;
+    }
+}
+
+void keyboardSpecial(int key, int x, int y)
+{
+    switch (key)
+    {
         case GLUT_KEY_LEFT:
+            //scenario.snake.set_direction(LEFT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_UP:
+            //scenario.snake.set_direction(UP);
             glutPostRedisplay();
         break;
         case GLUT_KEY_RIGHT:
+            //scenario.snake.set_direction(RIGHT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_DOWN:
+            //scenario.snake.set_direction(DOWN);
             glutPostRedisplay();
         break;
     }
@@ -91,14 +103,22 @@ void resize(int w, int h)
     glLoadIdentity();*/
 }
 
-void on_timer(int sig)
+#ifndef _WIN32
+    void on_timer(int sig)
+#else
+    void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
+#endif
 {
     scenario.snake.move();
+    cout << "foi\n";
+#ifndef _WIN32
     alarm(1);
+#endif
 }
 
 void set_timer()
 {
+#ifndef _WIN32
     /*struct sigaction sact;
 
     sigemptyset( &sact.sa_mask );
@@ -109,6 +129,9 @@ void set_timer()
 
     signal(SIGALRM, on_timer);
     alarm(1);
+#else
+    SetTimer(0, 1, 1000, (TIMERPROC) on_timer);
+#endif
 }
 
 int main(int argc, char** argv)
@@ -125,8 +148,11 @@ int main(int argc, char** argv)
     glutIdleFunc(display);
     glutReshapeFunc(resize);
     glutKeyboardFunc(keyboard);
-    //glutSpecialFunc(keyboard);
+    glutSpecialFunc(keyboardSpecial);
     init();
     glutMainLoop();
+#ifdef _WIN32
+    KillTimer(0, 1);
+#endif
     return 0;
 }
