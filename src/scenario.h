@@ -17,16 +17,16 @@ private:
     double xUp, yUp, zUp;
 
     void add_barrier();
-    void change_food_pos();
     void draw_axis();
     void draw_food();
     void draw_barrier();
 public:
     Snake snake;
     Scenario();
+    void change_food_pos();
     void draw_board();
     void draw_objects();
-    bool has_collision(Point p);
+    ObjectType has_collision(Point p);
     void change_camera_pos();
     void set_camera();
 };

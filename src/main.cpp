@@ -93,7 +93,26 @@ void resize(int w, int h)
 
 void on_timer(int sig)
 {
-    scenario.snake.move();
+    ObjectType o = scenario.has_collision(scenario.snake.head());
+
+    switch (o)
+    {
+        case NONE:
+            scenario.snake.move();
+        break;
+        case FOOD:
+            scenario.change_food_pos();
+            scenario.snake.grow();
+            scenario.snake.move();
+        break;
+        case BARRIER:
+        break;
+        case BOARD:
+        break;
+        default:
+        break;
+    }
+
     alarm(1);
 }
 

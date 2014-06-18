@@ -29,6 +29,15 @@ enum Direction
     RIGHT = 4,
 };
 
+enum ObjectType
+{
+    NONE    = 0,
+    SNAKE   = 1,
+    FOOD    = 2,
+    BARRIER = 3,
+    BOARD   = 4,
+};
+
 struct Point
 {
     float x, y, z;
