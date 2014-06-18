@@ -104,8 +104,11 @@ void display()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scenario->set_camera();
-    scenario->draw_objects();
+    if (is_running)
+    {
+        scenario->set_camera();
+        scenario->draw_objects();
+    }
 
     //glFlush();
     glutSwapBuffers();
@@ -165,9 +168,8 @@ void on_timer_func()
                 scenario->snake.move();
             break;
             case BARRIER:
-                game_over();
-            break;
             case BOARD:
+            case SNAKE:
                 game_over();
             break;
             default:

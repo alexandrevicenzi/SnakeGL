@@ -6,7 +6,6 @@
 //
 Snake::Snake()
 {
-    reset();
 }
 
 void Snake::reset()
