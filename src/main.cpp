@@ -39,19 +39,19 @@ void keyboardSpecial(int key, int x, int y)
     switch (key)
     {
         case GLUT_KEY_LEFT:
-            //scenario.snake.set_direction(LEFT);
+            scenario.snake.set_direction(LEFT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_UP:
-            //scenario.snake.set_direction(UP);
+            scenario.snake.set_direction(UP);
             glutPostRedisplay();
         break;
         case GLUT_KEY_RIGHT:
-            //scenario.snake.set_direction(RIGHT);
+            scenario.snake.set_direction(RIGHT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_DOWN:
-            //scenario.snake.set_direction(DOWN);
+            scenario.snake.set_direction(DOWN);
             glutPostRedisplay();
         break;
     }

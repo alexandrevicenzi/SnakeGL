@@ -9,7 +9,7 @@ void Snake::move()
 
 }
 
-void Snake::set_direction()
+void Snake::set_direction(Direction p)
 {
 
 }
