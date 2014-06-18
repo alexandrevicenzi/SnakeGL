@@ -6,7 +6,7 @@
 //
 Snake::Snake()
 {
-    direction = rand() % 4;
+    set_direction(rand() % 4);
     points.push_front(random_point());
     grow();
 }
@@ -17,8 +17,16 @@ void Snake::move()
     grow();
 }
 
-void Snake::set_direction(Direction d)
+void Snake::set_direction(int d)
 {
+    if ((d == DOWN && direction == UP) ||
+        (direction == DOWN && d == UP) ||
+        (d == LEFT && direction == RIGHT) ||
+        (direction == LEFT && d == RIGHT))
+    {
+        return;
+    }
+
     direction = d;
 
 #ifdef DEBUG
@@ -30,14 +38,14 @@ void Snake::draw()
 {
     Point h = points[0];
 
-    glColor3f(0.0, 0.0, 1.0);
+    glColor3f(1.0, 1.0, 0.6);
     glPushMatrix();
         glTranslatef(h.x, h.y, h.z);
         glutSolidCube(0.5f);
         //glutSolidSphere(0.5f, 100.0f, 100.0f);
     glPopMatrix();
 
-    glColor3f(0.0, 1.0, 0.4);
+    glColor3f(1.0, 0.7, 0.6);
 
     for (size_t i = 1; i < points.size(); ++i)
     {
@@ -58,23 +66,23 @@ Point Snake::head()
 void Snake::grow()
 {
     Point p;
-    p.x = points[0].x + 0.5f;
+    p.x = points[0].x;
     p.y = points[0].y;
     p.z = points[0].z;
 
     switch (direction)
     {
         case DOWN:
-
+            p.z += 0.5f;
         break;
         case UP:
-
+            p.z -= 0.5f;
         break;
         case LEFT:
-
+            p.x -= 0.5f;
         break;
         case RIGHT:
-
+            p.x += 0.5f;
         break;
     }
 

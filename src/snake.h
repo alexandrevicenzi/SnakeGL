@@ -12,7 +12,7 @@ private:
 public:
     Snake();
     void move();
-    void set_direction(Direction d);
+    void set_direction(int d);
     void draw();
     void grow();
     Point head();

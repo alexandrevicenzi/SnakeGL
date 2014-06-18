@@ -155,7 +155,7 @@ void set_timer()
     signal(SIGALRM, on_timer);
     alarm(1);
 #else
-    SetTimer(0, 1, 1000, (TIMERPROC) on_timer);
+    SetTimer(0, 1, 500, (TIMERPROC) on_timer);
 #endif
 }
 
