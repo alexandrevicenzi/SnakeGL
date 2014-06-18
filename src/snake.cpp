@@ -29,3 +29,13 @@ void Snake::draw()
         glutSolidCube(0.5f);
     glPopMatrix();
 }
+
+Point Snake::head()
+{
+
+}
+
+void Snake::grow()
+{
+
+}

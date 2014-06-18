@@ -109,8 +109,26 @@ void resize(int w, int h)
     void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
 #endif
 {
-    scenario.snake.move();
-    cout << "foi\n";
+    ObjectType o = scenario.has_collision(scenario.snake.head());
+
+    switch (o)
+    {
+        case NONE:
+            scenario.snake.move();
+        break;
+        case FOOD:
+            scenario.change_food_pos();
+            scenario.snake.grow();
+            scenario.snake.move();
+        break;
+        case BARRIER:
+        break;
+        case BOARD:
+        break;
+        default:
+        break;
+    }
+
 #ifndef _WIN32
     alarm(1);
 #endif

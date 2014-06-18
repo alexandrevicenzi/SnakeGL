@@ -104,14 +104,19 @@ void Scenario::draw_objects()
     snake.draw();
 }
 
-bool Scenario::has_collision(Point p)
+ObjectType Scenario::has_collision(Point p)
 {
     if (p.x > 5.0f || p.x < -5.0f || p.z > 5.0f || p.z < -5.0f)
     {
-        return true;
+        return BOARD;
     }
 
-    return false;
+    if (p.x == food.x && p.z == food.z)
+    {
+        return FOOD;
+    }
+
+    return NONE;
 }
 
 void Scenario::change_camera_pos()

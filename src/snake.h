@@ -13,4 +13,6 @@ public:
     void move();
     void set_direction();
     void draw();
+    void grow();
+    Point head();
 };
