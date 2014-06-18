@@ -10,19 +10,41 @@ Scenario::Scenario()
     xUp = 0.0f;
     yUp = 1.0f;
     zUp = 0.0f;
-    camera_mode = 0;
+}
+
+void Scenario::reset()
+{
+    barriers.clear();
+    camera_mode = 3;
+    snake.reset();
+    /*while (has_collision(snake.head()) || has_collision(snake.tail()))
+    {
+        snake.reset();
+    }*/
     change_food_pos();
     add_barrier();
 }
 
 void Scenario::add_barrier()
 {
-    barriers.push_back(random_point());
+    Point p = random_point();
+/*
+    while (has_collision(p) != NONE)
+    {
+        p = random_point();
+    }
+*/
+    barriers.push_back(p);
 }
 
 void Scenario::change_food_pos()
 {
     food = random_point();
+/*
+    while (has_collision(food) != NONE)
+    {
+        food = random_point();
+    }*/
 }
 void Scenario::draw_axis()
 {
@@ -93,7 +115,6 @@ void Scenario::draw_objects()
     draw_board();
     draw_food();
     draw_barrier();
-
     snake.draw();
 }
 
@@ -135,6 +156,10 @@ void Scenario::change_camera_pos()
     {
         camera_mode = 0;
     }
+
+#ifdef DEBUG
+    cout << "camera = " << camera_mode << "\n";
+#endif
 }
 
 void Scenario::set_camera()

@@ -17,4 +17,6 @@ public:
     void draw();
     void grow();
     Point head();
+    Point tail();
+    void reset();
 };

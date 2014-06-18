@@ -29,4 +29,5 @@ public:
     ObjectType has_collision(Point p);
     void change_camera_pos();
     void set_camera();
+    void reset();
 };

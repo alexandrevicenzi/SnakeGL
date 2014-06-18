@@ -57,11 +57,9 @@ inline Point random_point()
     p.z = random_pos();
 
 #ifdef DEBUG
-    cout << "========================================\n";
     cout << "x = " << p.x << " ";
     cout << "y = " << p.y << " ";
     cout << "z = " << p.z << "\n";
-    cout << "========================================\n";
 #endif
 
     return p;

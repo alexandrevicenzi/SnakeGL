@@ -6,13 +6,23 @@
 //
 Snake::Snake()
 {
-    set_direction(rand() % 4);
+    reset();
+}
+
+void Snake::reset()
+{
+    points.clear();
+    int d = (rand() % 4) + 1;
+    set_direction(d);
     points.push_front(random_point());
     grow();
 }
 
 void Snake::move()
 {
+#ifdef DEBUG
+    cout << "walk\n";
+#endif
     points.pop_back();
     grow();
 }
@@ -30,7 +40,7 @@ void Snake::set_direction(int d)
     direction = d;
 
 #ifdef DEBUG
-    cout << "Direction = " << direction << "\n";
+    cout << "direction = " << direction << "\n";
 #endif
 }
 
@@ -61,6 +71,11 @@ void Snake::draw()
 Point Snake::head()
 {
     return points[0];
+}
+
+Point Snake::tail()
+{
+    return points[points.size() - 1];
 }
 
 void Snake::grow()
