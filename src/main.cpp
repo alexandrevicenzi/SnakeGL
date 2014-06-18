@@ -18,7 +18,7 @@
 int width  = 400,//320,
     height = 400;//240;
 
-Scenario scenario;
+Scenario* scenario = NULL;
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -28,8 +28,13 @@ void keyboard(unsigned char key, int x, int y)
             exit(0);
         break;
         case KEY_SPACE:
-            scenario.change_camera_pos();
+            scenario->change_camera_pos();
             glutPostRedisplay();
+        break;
+        case 'R':
+        case 'r':
+            delete scenario;
+            scenario = new Scenario();
         break;
     }
 }
@@ -39,19 +44,19 @@ void keyboardSpecial(int key, int x, int y)
     switch (key)
     {
         case GLUT_KEY_LEFT:
-            scenario.snake.set_direction(LEFT);
+            scenario->snake.set_direction(LEFT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_UP:
-            scenario.snake.set_direction(UP);
+            scenario->snake.set_direction(UP);
             glutPostRedisplay();
         break;
         case GLUT_KEY_RIGHT:
-            scenario.snake.set_direction(RIGHT);
+            scenario->snake.set_direction(RIGHT);
             glutPostRedisplay();
         break;
         case GLUT_KEY_DOWN:
-            scenario.snake.set_direction(DOWN);
+            scenario->snake.set_direction(DOWN);
             glutPostRedisplay();
         break;
     }
@@ -79,6 +84,8 @@ void init()
     glEnable(GL_LIGHTING);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    scenario = new Scenario();
 }
 
 void display()
@@ -89,8 +96,8 @@ void display()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scenario.set_camera();
-    scenario.draw_objects();
+    scenario->set_camera();
+    scenario->draw_objects();
 
     //glFlush();
     glutSwapBuffers();
@@ -109,17 +116,17 @@ void resize(int w, int h)
     void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
 #endif
 {
-    ObjectType o = scenario.has_collision(scenario.snake.head());
+    ObjectType o = scenario->has_collision(scenario->snake.head());
 
     switch (o)
     {
         case NONE:
-            scenario.snake.move();
+            scenario->snake.move();
         break;
         case FOOD:
-            scenario.change_food_pos();
-            scenario.snake.grow();
-            scenario.snake.move();
+            scenario->change_food_pos();
+            scenario->snake.grow();
+            scenario->snake.move();
         break;
         case BARRIER:
         break;

@@ -7,9 +7,10 @@
 class Snake
 {
 private:
-    vector<Point> points;
-    Direction direction;
+    deque<Point> points;
+    int direction;
 public:
+    Snake();
     void move();
     void set_direction(Direction d);
     void draw();

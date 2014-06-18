@@ -17,19 +17,12 @@ Scenario::Scenario()
 
 void Scenario::add_barrier()
 {
-    Point p;
-    p.x = (rand() % 20 / 2.0f) - 5.0f;
-    p.y = DIFF;
-    p.z = (rand() % 20 / 2.0f) - 5.0f;
-
-    barriers.push_back(p);
+    barriers.push_back(random_point());
 }
 
 void Scenario::change_food_pos()
 {
-    food.x = (rand() % 20 / 2.0f) - 5.0f;
-    food.y = DIFF;
-    food.z = (rand() % 20 / 2.0f) - 5.0f;
+    food = random_point();
 }
 void Scenario::draw_axis()
 {
