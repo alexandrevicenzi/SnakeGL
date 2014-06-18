@@ -18,6 +18,9 @@
 int width  = 400,//320,
     height = 400;//240;
 
+bool is_game_over = false,
+     is_running   = false;
+
 Scenario* scenario = NULL;
 
 void keyboard(unsigned char key, int x, int y)
@@ -35,12 +38,16 @@ void keyboard(unsigned char key, int x, int y)
         case 'r':
             delete scenario;
             scenario = new Scenario();
+            is_game_over = false;
+            is_running = true;
         break;
     }
 }
 
 void keyboardSpecial(int key, int x, int y)
 {
+    if (!is_running || is_game_over) return;
+
     switch (key)
     {
         case GLUT_KEY_LEFT:
@@ -116,26 +123,30 @@ void resize(int w, int h)
     void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
 #endif
 {
-    ObjectType o = scenario->has_collision(scenario->snake.head());
-
-    switch (o)
+    if (is_running)
     {
-        case NONE:
-            scenario->snake.move();
-        break;
-        case FOOD:
-            scenario->change_food_pos();
-            scenario->snake.grow();
-            scenario->snake.move();
-        break;
-        case BARRIER:
-        break;
-        case BOARD:
-        break;
-        default:
-        break;
-    }
+        ObjectType o = scenario->has_collision(scenario->snake.head());
 
+        switch (o)
+        {
+            case NONE:
+                scenario->snake.move();
+            break;
+            case FOOD:
+                scenario->change_food_pos();
+                scenario->snake.grow();
+                scenario->snake.move();
+            break;
+            case BARRIER:
+                is_game_over = true;
+            break;
+            case BOARD:
+                is_game_over = false;
+            break;
+            default:
+            break;
+        }
+    }
 #ifndef _WIN32
     alarm(1);
 #endif

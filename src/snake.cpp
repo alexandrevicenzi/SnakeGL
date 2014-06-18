@@ -88,3 +88,19 @@ void Snake::grow()
 
     points.push_front(p);
 }
+
+bool Snake::has_collision(Point p)
+{
+    // Skip head. It's the same point.
+    for (size_t i = 1; i < points.size(); ++i)
+    {
+        Point b = points.at(i);
+
+        if (p.x == b.x && p.z == b.z)
+        {
+            return BARRIER;
+        }
+    }
+
+    return false;
+}

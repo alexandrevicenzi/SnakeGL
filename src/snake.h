@@ -13,6 +13,7 @@ public:
     Snake();
     void move();
     void set_direction(int d);
+    bool has_collision(Point p);
     void draw();
     void grow();
     Point head();

@@ -109,6 +109,21 @@ ObjectType Scenario::has_collision(Point p)
         return FOOD;
     }
 
+    for (size_t i = 0; i < barriers.size(); ++i)
+    {
+        Point b = barriers.at(i);
+
+        if (p.x == b.x && p.z == b.z)
+        {
+            return BARRIER;
+        }
+    }
+
+    if (snake.has_collision(p))
+    {
+        return SNAKE;
+    }
+
     return NONE;
 }
 
