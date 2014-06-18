@@ -13,19 +13,14 @@ all: clean snake
 
 debug: clean snakedebug
 
-doc:
-	$(info Gerando documentacao...)
-	doxygen doxygen.config
-
 snakedebug:
-	$(info Compilando modo degug...)
+	$(info Compiling degug mode...)
 	g++ -g -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS)
 
 snake:
-	$(info Compilando...)
+	$(info Compiling...)
 	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DDEBUG
 
 clean:
-	$(info Removendo objetos...)
+	$(info Removing objects...)
 	rm -f snake$(EXT)
-	rm -f -r html/
