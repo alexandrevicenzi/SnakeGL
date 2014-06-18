@@ -117,11 +117,7 @@ void resize(int w, int h)
     glLoadIdentity();*/
 }
 
-#ifndef _WIN32
-    void on_timer(int sig)
-#else
-    void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
-#endif
+void on_timer_func()
 {
     if (is_running)
     {
@@ -147,33 +143,29 @@ void resize(int w, int h)
             break;
         }
     }
-#ifndef _WIN32
-    alarm(1);
-#endif
 }
 
-void set_timer()
-{
 #ifndef _WIN32
-    /*struct sigaction sact;
-
-    sigemptyset( &sact.sa_mask );
-    sact.sa_flags = 0;
-    sact.sa_handler = on_timer;
-    sigaction( SIGALRM, &sact, NULL );
-    */
-
-    signal(SIGALRM, on_timer);
-    alarm(1);
+    void on_timer(int sig)
+    {
+        on_timer_func();
+        alarm(1);
+    }
 #else
-    SetTimer(0, 1, 500, (TIMERPROC) on_timer);
+    void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
+    {
+        on_timer_func();
+    }
 #endif
-}
 
 int main(int argc, char** argv)
 {
-    set_timer();
-
+#ifdef _WIN32
+    SetTimer(0, 1, 500, (TIMERPROC) on_timer);
+#else
+    signal(SIGALRM, on_timer);
+    alarm(1);
+#endif
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     //glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
