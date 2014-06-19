@@ -16,6 +16,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+
 #include <SOIL/SOIL.h>
 
 using namespace std;
@@ -83,17 +84,80 @@ inline void load_image(const char* filename)
     SOIL_free_image_data(image);
 }
 
+inline void enable_2D_texture()
+{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+    GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+    GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+    GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat high_shininess[] = { 0.0f };
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+ 
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+
+    glEnable(GL_TEXTURE_2D);
+}
+
+inline void disable_2D_texture()
+{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+    GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+    GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+    GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat high_shininess[] = { 100.0f };
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+ 
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+
+    glDisable(GL_TEXTURE_2D);
+}
+
 inline void draw_cube(float size, Point p, const char* filename)
 {
+    enable_2D_texture();
     glPushMatrix();
         load_image(filename);
         glTranslatef(p.x, p.y, p.z);
         glutSolidCube2(size);
     glPopMatrix();
+    disable_2D_texture();
 }
 
 inline void draw_sphere(float size, Point p, const char* filename)
 {
+    enable_2D_texture();
     glPushMatrix();
         load_image(filename);
         glTranslatef(p.x, p.y, p.z);
@@ -105,4 +169,5 @@ inline void draw_sphere(float size, Point p, const char* filename)
         //glutSolidCube(0.5f);
         //draw_cube(0.5f, p, res_id);
     glPopMatrix();
+    disable_2D_texture();
 }

@@ -70,6 +70,7 @@ void Scenario::draw_axis()
 
 void Scenario::draw_board()
 {
+    enable_2D_texture();
     glPushMatrix();
         load_image("./resources/grass.png");
         glBegin(GL_POLYGON);
@@ -85,6 +86,7 @@ void Scenario::draw_board()
             glVertex3f(-BOARD_SIZE, 0.0f, -BOARD_SIZE);
         glEnd();
     glPopMatrix();
+    disable_2D_texture();
 }
 
 void Scenario::draw_food()
