@@ -61,7 +61,9 @@ void Snake::draw()
         //glutSolidSphere(0.5f, 100.0f, 100.0f);
     glPopMatrix();
 
-    glColor3f(1.0, 0.7, 0.6);
+    // Load just once. It's to slow to load an image.
+    enable_2D_texture();
+    load_image("./resources/snake.jpg");
 
     for (size_t i = 1; i < points.size(); ++i)
     {
@@ -69,9 +71,11 @@ void Snake::draw()
 
         glPushMatrix();
             glTranslatef(p.x, p.y, p.z);
-            glutSolidCube(0.5f);
+            glutSolidCube2(0.5f);
         glPopMatrix();
     }
+
+    disable_2D_texture();
 }
 
 Point Snake::head()
