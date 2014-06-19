@@ -21,6 +21,11 @@ snake:
 	$(info Compiling...)
 	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DDEBUG
 
+gcw:
+	$(info Compiling for GCW...)
+	mipsel-linux-gcc -o snake-gcw main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS)
+
 clean:
 	$(info Removing objects...)
 	rm -f snake$(EXT)
+	rm -f snake-gcw
