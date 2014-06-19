@@ -72,7 +72,7 @@ void Scenario::draw_board()
 {
     enable_2D_texture();
     glPushMatrix();
-        load_image("./resources/grass.png");
+        glBindTexture(GL_TEXTURE_2D, textures[GROUND_TEXTURE]);
         glBegin(GL_POLYGON);
             //glColor3f(0.0f, 1.0f, 0.0f);
             glNormal3f(0.0, 1.0, 0.0);
@@ -92,7 +92,7 @@ void Scenario::draw_board()
 void Scenario::draw_food()
 {
     Point p = food;
-    draw_sphere(0.25f, p, "./resources/apple.png");
+    draw_sphere(0.25f, p, FOOD_TEXTURE);
 }
 
 void Scenario::draw_barrier()
@@ -100,7 +100,7 @@ void Scenario::draw_barrier()
     for (size_t i = 0; i < barriers.size(); ++i)
     {
         Point p = barriers.at(i);
-        draw_cube(0.5f, p, "./resources/box.png");
+        draw_cube(0.5f, p, BARRIER_TEXTURE);
     }
 }
 

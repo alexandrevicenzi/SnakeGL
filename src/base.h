@@ -5,6 +5,7 @@
     #include <windows.h>
     #include <GL/gl.h>
     #include <GL/glut.h>
+    #include <GL/glext.h>
 #else
     #include <GL/gl.h>
     #include <GL/glut.h>
@@ -25,6 +26,16 @@ using namespace std;
 #define BOARD_SIZE  5.25f
 // Y axis difference. Ground to Objects.
 #define GROUND_DIFF 0.25f
+
+#define GROUND_TEXTURE  0
+#define FOOD_TEXTURE    1
+#define BARRIER_TEXTURE 2
+#define SNAKE_TEXTURE   3
+
+#define TEXTURE_COUNT 4
+
+
+GLuint textures[TEXTURE_COUNT];
 
 enum Direction
 {
@@ -144,30 +155,60 @@ inline void disable_2D_texture()
     glDisable(GL_TEXTURE_2D);
 }
 
-inline void draw_cube(float size, Point p, const char* filename)
+inline void draw_cube(float size, Point p, int res_id)
 {
     enable_2D_texture();
+
     glPushMatrix();
-        load_image(filename);
+        glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
         glutSolidCube2(size);
     glPopMatrix();
+
     disable_2D_texture();
 }
 
-inline void draw_sphere(float size, Point p, const char* filename)
+inline void draw_sphere(float size, Point p, int res_id)
 {
     enable_2D_texture();
+
     glPushMatrix();
-        load_image(filename);
+        glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
         glutSolidSphere(size, 100.0f, 100.0f);
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
-        //glutSolidCube(0.5f);
-        //draw_cube(0.5f, p, res_id);
     glPopMatrix();
+
     disable_2D_texture();
+}
+
+void load_texture(/*int res_id, */const char* filename, int index)
+{
+    int width, height;
+    unsigned char* image;
+
+    //glActiveTexture(res_id);
+    glBindTexture(GL_TEXTURE_2D, textures[index]);
+
+    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    SOIL_free_image_data(image);
+}
+
+void load_resources()
+{
+    glGenTextures(TEXTURE_COUNT, textures);
+
+    load_texture(/*GL_TEXTURE0, */"./resources/grass.png", GROUND_TEXTURE);
+    load_texture(/*GL_TEXTURE1, */"./resources/apple.png", FOOD_TEXTURE);
+    load_texture(/*GL_TEXTURE2, */"./resources/box.png",   BARRIER_TEXTURE);
+    load_texture(/*GL_TEXTURE3, */"./resources/snake.png", SNAKE_TEXTURE);
+}
+
+void unload_resources()
+{
+    glDeleteTextures(TEXTURE_COUNT, textures);
 }

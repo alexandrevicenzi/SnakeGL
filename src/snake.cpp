@@ -61,9 +61,8 @@ void Snake::draw()
         //glutSolidSphere(0.5f, 100.0f, 100.0f);
     glPopMatrix();
 
-    // Load just once. It's to slow to load an image.
     enable_2D_texture();
-    load_image("./resources/snake.jpg");
+    glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
 
     for (size_t i = 1; i < points.size(); ++i)
     {

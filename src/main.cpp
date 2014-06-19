@@ -15,8 +15,8 @@
 #define KEY_SPACE  32
 
 
-int width  = 400,//320,
-    height = 400;//240;
+int width  = 600,//320,
+    height = 600;//240;
 
 bool is_game_over = false,
      is_running   = false;
@@ -92,6 +92,9 @@ void init()
     glDisable(GL_LIGHTING);
 #endif
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Load just once. It's to slow to load an image.
+    load_resources();
 
     scenario = new Scenario();
 }
