@@ -86,11 +86,13 @@ void init()
 
     glEnable(GL_DEPTH_TEST);
 
-    glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
+#ifdef USE_BUFFERS
     glEnable(GL_LIGHTING);
-
+#else
+    glDisable(GL_LIGHTING);
+#endif
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     scenario = new Scenario();
@@ -110,8 +112,11 @@ void display()
         scenario->draw_objects();
     }
 
-    //glFlush();
+#ifdef USE_BUFFERS
     glutSwapBuffers();
+#else
+    glFlush();
+#endif
 }
 
 void resize(int w, int h)
@@ -200,8 +205,11 @@ int main(int argc, char** argv)
     ualarm(500000, 0);
 #endif
     glutInit(&argc, argv);
+#ifdef USE_BUFFERS
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    //glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+#else
+    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+#endif
     glutInitWindowSize(width, height);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("SnakeGL");
