@@ -17,10 +17,6 @@ void Scenario::reset()
     barriers.clear();
     camera_mode = 3;
     snake.reset();
-    /*while (has_collision(snake.head()) || has_collision(snake.tail()))
-    {
-        snake.reset();
-    }*/
     change_food_pos();
     add_barrier();
 }
@@ -28,23 +24,25 @@ void Scenario::reset()
 void Scenario::add_barrier()
 {
     Point p = random_point();
-/*
+
     while (has_collision(p) != NONE)
     {
         p = random_point();
     }
-*/
+
     barriers.push_back(p);
 }
 
 void Scenario::change_food_pos()
 {
-    food = random_point();
-/*
-    while (has_collision(food) != NONE)
+    Point p = random_point();
+
+    while (has_collision(p) != NONE)
     {
-        food = random_point();
-    }*/
+        p = random_point();
+    }
+
+    food = p;
 }
 void Scenario::draw_axis()
 {
