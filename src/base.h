@@ -10,10 +10,13 @@
     #include <GL/glut.h>
 #endif
 
+#include "glut2.h"
+
 #include <deque>
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <SOIL/SOIL.h>
 
 using namespace std;
 
@@ -44,6 +47,11 @@ struct Point
     float x, y, z;
 };
 
+inline int random_range(int min, int max)
+{
+    return (rand() % (max + min)) + min;
+}
+
 inline float random_pos()
 {
     return (rand() % 20 / 2.0f) - 5.0f;
@@ -63,4 +71,38 @@ inline Point random_point()
 #endif
 
     return p;
+}
+
+inline void load_image(const char* filename)
+{
+    int width, height;
+    unsigned char* image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+    SOIL_free_image_data(image);
+}
+
+inline void draw_cube(float size, Point p, const char* filename)
+{
+    glPushMatrix();
+        load_image(filename);
+        glTranslatef(p.x, p.y, p.z);
+        glutSolidCube2(size);
+    glPopMatrix();
+}
+
+inline void draw_sphere(float size, Point p, const char* filename)
+{
+    glPushMatrix();
+        load_image(filename);
+        glTranslatef(p.x, p.y, p.z);
+        glEnable(GL_TEXTURE_GEN_S);
+        glEnable(GL_TEXTURE_GEN_T);
+        glutSolidSphere(size, 100.0f, 100.0f);
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
+        //glutSolidCube(0.5f);
+        //draw_cube(0.5f, p, res_id);
+    glPopMatrix();
 }

@@ -36,8 +36,6 @@ void keyboard(unsigned char key, int x, int y)
         break;
         case 'R':
         case 'r':
-            //delete scenario;
-            //scenario = new Scenario();
             scenario->reset();
             is_game_over = false;
             is_running = true;
@@ -95,6 +93,33 @@ void init()
 #endif
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+    GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+    GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+    GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat high_shininess[] = { 0.0f }; 
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+ 
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+
+    glEnable(GL_TEXTURE_2D);
+
     scenario = new Scenario();
 }
 
@@ -128,6 +153,7 @@ void resize(int w, int h)
 
 void game_over()
 {
+    cout << "collision\n";
     is_game_over = true;
     cout << "┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
     cout << "███▀▀▀██┼███▀▀▀███┼███▀█▄█▀███┼██▀▀▀\n";

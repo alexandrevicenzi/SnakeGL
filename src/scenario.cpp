@@ -70,25 +70,27 @@ void Scenario::draw_axis()
 
 void Scenario::draw_board()
 {
-    glBegin(GL_POLYGON);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glNormal3f(0.0, 1.0, 0.0);
-
-        glVertex3f(-BOARD_SIZE, 0.0f,  BOARD_SIZE);
-        glVertex3f( BOARD_SIZE, 0.0f,  BOARD_SIZE);
-        glVertex3f( BOARD_SIZE, 0.0f, -BOARD_SIZE);
-        glVertex3f(-BOARD_SIZE, 0.0f, -BOARD_SIZE);
-    glEnd();
+    glPushMatrix();
+        load_image("./resources/grass.png");
+        glBegin(GL_POLYGON);
+            //glColor3f(0.0f, 1.0f, 0.0f);
+            glNormal3f(0.0, 1.0, 0.0);
+            glTexCoord2f(0, 0);
+            glVertex3f(-BOARD_SIZE, 0.0f,  BOARD_SIZE);
+            glTexCoord2f(1, 0);
+            glVertex3f( BOARD_SIZE, 0.0f,  BOARD_SIZE);
+            glTexCoord2f(1, 1);
+            glVertex3f( BOARD_SIZE, 0.0f, -BOARD_SIZE);
+            glTexCoord2f(0, 1);
+            glVertex3f(-BOARD_SIZE, 0.0f, -BOARD_SIZE);
+        glEnd();
+    glPopMatrix();
 }
 
 void Scenario::draw_food()
 {
-    glColor3f(1.0, 0.0, 0.0);
-    glPushMatrix();
-        glTranslatef(food.x, food.y, food.z);
-        //glutSolidSphere(0.5f, 100.0f, 100.0f);
-        glutSolidCube(0.5f);
-    glPopMatrix();
+    Point p = food;
+    draw_sphere(0.25f, p, "./resources/apple.png");
 }
 
 void Scenario::draw_barrier()
@@ -96,12 +98,7 @@ void Scenario::draw_barrier()
     for (size_t i = 0; i < barriers.size(); ++i)
     {
         Point p = barriers.at(i);
-
-        glColor3f(0.6, 0.4, 0.4);
-        glPushMatrix();
-            glTranslatef(p.x, p.y, p.z);
-            glutSolidCube(0.5f);
-        glPopMatrix();
+        draw_cube(0.5f, p, "./resources/box.png");
     }
 }
 
@@ -118,7 +115,10 @@ void Scenario::draw_objects()
 
 ObjectType Scenario::has_collision(Point p)
 {
-    if (p.x > 5.0f || p.x < -5.0f || p.z > 5.0f || p.z < -5.0f)
+    if (p.x >  5.0f ||
+        p.x < -5.0f ||
+        p.z >  5.0f ||
+        p.z < -5.0f)
     {
         return BOARD;
     }

@@ -13,7 +13,14 @@ void Snake::reset()
     points.clear();
     int d = (rand() % 4) + 1;
     set_direction(d);
-    points.push_front(random_point());
+
+    Point p;
+    p.x = 0.0f;
+    p.y = GROUND_DIFF;
+    p.z = 0.0f;
+
+    points.push_front(p);
+
     grow();
 }
 

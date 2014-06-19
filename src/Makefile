@@ -2,7 +2,7 @@ ifeq ($(OS),Windows_NT)
 	GLFLAGS = -lglut32win -lopengl32 -lglu32
 	EXT = .exe
 else
-	GLFLAGS = -lGL -lGLU -lglut
+	GLFLAGS = -lGL -lGLU -lglut -lSOIL
 	EXT = 
 endif
 
