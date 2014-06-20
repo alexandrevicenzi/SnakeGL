@@ -14,6 +14,7 @@ private:
     bool      is_running;
     bool      paused;
     bool      ate;
+    bool      key_pressed;
     int       m, m2;
     int       frameCount;
     int       currentTime;

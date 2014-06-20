@@ -51,16 +51,17 @@ void Game::reset()
 void Game::display()
 {
     calculateFPS();
+    Point p;
 
+#ifdef DEBUG
     char s [50];
     sprintf(s, "FPS: %f", fps);
-
-    Point p;
 
     p.x = -7.0f;
     p.y = 0.5f;
     p.z = 7.0f;
     draw_text(s, p, 0.0f, 0.0f, 0.0f);
+#endif
 
     if (is_running)
     {
@@ -80,7 +81,7 @@ void Game::display()
 
         sprintf(s, "SCORE: %d", score * 10);
 
-        p.x = 5.0f;
+        p.x = -1.0f;
         p.y = 0.5f;
         p.z = -7.0f;
 
@@ -104,6 +105,7 @@ void Game::run()
 
     ObjectType o = scenario->has_collision(scenario->snake.head());
     ate = false;
+    key_pressed = false;
 
     switch (o)
     {
@@ -154,20 +156,24 @@ void Game::on_key_pressed(int key)
             reset();
         break;
         case KEY_LEFT:
-            if (!is_running) return;
+            if (!is_running || key_pressed) return;
             scenario->snake.set_direction(LEFT);
+            key_pressed = true;
         break;
         case KEY_UP:
-            if (!is_running) return;
+            if (!is_running || key_pressed) return;
             scenario->snake.set_direction(UP);
+            key_pressed = true;
         break;
         case KEY_RIGHT:
-            if (!is_running) return;
+            if (!is_running || key_pressed) return;
             scenario->snake.set_direction(RIGHT);
+            key_pressed = true;
         break;
         case KEY_DOWN:
-            if (!is_running) return;
+            if (!is_running || key_pressed) return;
             scenario->snake.set_direction(DOWN);
+            key_pressed = true;
         break;
     }
 }

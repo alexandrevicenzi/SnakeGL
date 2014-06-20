@@ -118,7 +118,7 @@ int main(int argc, char** argv)
 #endif
 
     glutInitWindowSize(width, height);
-    glutInitWindowPosition(10, 10);
+    glutInitWindowPosition(100, 100);
     glutCreateWindow("SnakeGL");
     glutDisplayFunc(display);
     glutIdleFunc(display);
