@@ -3,6 +3,7 @@
 
 Game::Game()
 {
+    m = 30;
     is_game_over = false;
     is_running = false;
     paused = false;
@@ -23,11 +24,14 @@ void Game::display()
 
         if (is_game_over)
         {
-            Point p;
-            p.x = -1.25f;
-            p.y = 0.5f;
-            p.z = 0.0f;
-            draw_text("GAME OVER", p, 1.0f, 0.0f, 0.0f);
+            if (wait())
+            {
+                Point p;
+                p.x = -1.25f;
+                p.y = 0.5f;
+                p.z = 0.15f;
+                draw_text("GAME OVER", p, 0.0f, 0.0f, 0.0f);
+            }
         }
     }
 }
@@ -51,6 +55,7 @@ void Game::stop()
 
 void Game::reset()
 {
+    m = 30;
     scenario->reset();
     is_game_over = false;
     paused = false;
@@ -126,4 +131,12 @@ void Game::on_key_pressed(int key)
             scenario->snake.set_direction(DOWN);
         break;
     }
+}
+
+bool Game::wait()
+{
+    bool wait = m > 0 && m < 30;
+    m++;
+    if (m > 30) m = -30;
+    return wait;
 }

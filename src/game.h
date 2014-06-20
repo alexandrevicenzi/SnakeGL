@@ -11,8 +11,9 @@ private:
     bool      is_game_over;
     bool      is_running;
     bool      paused;
-    GLuint    textures[TEXTURE_COUNT];
     Scenario* scenario;
+    int       m;
+    bool      wait();
 public:
     Game();
     ~Game();

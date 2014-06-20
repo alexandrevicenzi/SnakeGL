@@ -219,13 +219,17 @@ inline void unload_resources()
 
 inline void draw_text(char* s, Point p, float r, float g, float b)
 {
+    glDisable(GL_LIGHTING);
+
     int len, i;
     glColor3f(r, g, b);
-    glRasterPos2f(p.x, p.z);
+    glRasterPos3f(p.x, p.y,p.z);
     len = (int) strlen(s);
 
     for (i = 0; i < len; i++)
     {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, s[i]);
     }
+
+    glEnable(GL_LIGHTING);
 }
