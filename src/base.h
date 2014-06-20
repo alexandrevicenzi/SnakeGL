@@ -94,9 +94,7 @@ inline void load_image(const char* filename)
 {
     int width, height;
     unsigned char* image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
-
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-
     SOIL_free_image_data(image);
 }
 
@@ -180,11 +178,9 @@ inline void draw_sphere(float size, Point p, int res_id)
     glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
-        glEnable(GL_TEXTURE_GEN_S);
-        glEnable(GL_TEXTURE_GEN_T);
+
         glut2SolidSphere(size, 100.0f, 100.0f);
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
+
     glPopMatrix();
 
     disable_2D_texture();
