@@ -239,6 +239,7 @@ inline void draw_text(char* s, Point p, float r, float g, float b)
 */
 static void setVSync(bool sync)
 {
+#ifdef _WIN32
     typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALPROC)( int );
     PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
 
@@ -255,4 +256,5 @@ static void setVSync(bool sync)
         if( wglSwapIntervalEXT )
             wglSwapIntervalEXT(sync);
     }
+#endif
 }
