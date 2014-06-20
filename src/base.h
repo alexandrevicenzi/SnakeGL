@@ -233,3 +233,26 @@ inline void draw_text(char* s, Point p, float r, float g, float b)
 
     glEnable(GL_LIGHTING);
 }
+
+/*
+    http://www.dbfinteractive.com/forum/index.php?topic=5998.0
+*/
+static void setVSync(bool sync)
+{
+    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALPROC)( int );
+    PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
+
+    const char *extensions = (char*)glGetString( GL_EXTENSIONS );
+
+    if( strstr( extensions, "WGL_EXT_swap_control" ) == 0 )
+    {
+        return;
+    }
+    else
+    {
+        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
+
+        if( wglSwapIntervalEXT )
+            wglSwapIntervalEXT(sync);
+    }
+}

@@ -4,6 +4,8 @@
 #endif
 
 #include "scenario.cpp"
+#include <ctime>
+#include <cstdio>
 
 class Game
 {
@@ -13,7 +15,12 @@ private:
     bool      paused;
     Scenario* scenario;
     int       m;
+    int       frameCount;
+    float     fps;
+    int       currentTime;
+    int       previousTime;
     bool      wait();
+    void      calculateFPS();
 public:
     Game();
     ~Game();

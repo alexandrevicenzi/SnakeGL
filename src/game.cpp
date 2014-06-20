@@ -1,8 +1,10 @@
 #include "game.h"
 
-
 Game::Game()
 {
+    fps = 0;
+    currentTime = 0,
+    previousTime = 0;
     m = 30;
     is_game_over = false;
     is_running = false;
@@ -17,6 +19,16 @@ Game::~Game()
 
 void Game::display()
 {
+    calculateFPS();
+    char s [50];
+    sprintf(s, "FPS: %f", fps);
+
+    Point p;
+    p.x = -7.0f;
+    p.y = 0.5f;
+    p.z = 7.0f;
+    draw_text(s, p, 0.0f, 0.0f, 0.0f);
+
     if (is_running)
     {
         scenario->set_camera();
@@ -60,6 +72,7 @@ void Game::reset()
     is_game_over = false;
     paused = false;
     is_running = true;
+    frameCount = 0;
 }
 
 void Game::run()
@@ -139,4 +152,27 @@ bool Game::wait()
     m++;
     if (m > 30) m = -30;
     return wait;
+}
+
+void Game::calculateFPS(void)
+{
+    //  Increase frame count
+    frameCount++;
+
+    //  Get the number of milliseconds since glutInit called
+    //  (or first call to glutGet(GLUT ELAPSED TIME)).
+    currentTime = glutGet(GLUT_ELAPSED_TIME);
+
+    //  Calculate time passed
+    int timeInterval = currentTime - previousTime;
+
+    if(timeInterval > 1000)
+    {
+        //  calculate the number of frames per second
+        fps = frameCount / (timeInterval / 1000.0f);
+        //  Set time
+        previousTime = currentTime;
+        //  Reset frame count
+        frameCount = 0;
+    }
 }
