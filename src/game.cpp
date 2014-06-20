@@ -1,11 +1,12 @@
 #include "game.h"
 
+#define to_fps(fps, value) value * fps / 60
+
 Game::Game()
 {
-    fps = 0;
-    currentTime = 0,
-    previousTime = 0;
-    m = 30;
+    fps = 60;
+    currentTime = glutGet(GLUT_ELAPSED_TIME),
+    previousTime = currentTime - 1001;
     is_game_over = false;
     is_running = false;
     paused = false;
@@ -15,37 +16,6 @@ Game::Game()
 Game::~Game()
 {
     delete scenario;
-}
-
-void Game::display()
-{
-    calculateFPS();
-    char s [50];
-    sprintf(s, "FPS: %f", fps);
-
-    Point p;
-    p.x = -7.0f;
-    p.y = 0.5f;
-    p.z = 7.0f;
-    draw_text(s, p, 0.0f, 0.0f, 0.0f);
-
-    if (is_running)
-    {
-        scenario->set_camera();
-        scenario->draw_objects();
-
-        if (is_game_over)
-        {
-            if (wait())
-            {
-                Point p;
-                p.x = -1.25f;
-                p.y = 0.5f;
-                p.z = 0.15f;
-                draw_text("GAME OVER", p, 0.0f, 0.0f, 0.0f);
-            }
-        }
-    }
 }
 
 void Game::pause()
@@ -67,7 +37,10 @@ void Game::stop()
 
 void Game::reset()
 {
-    m = 30;
+    score = 0;
+    ate = false;
+    m = to_fps(fps, 30);
+    m = to_fps(fps, 10);
     scenario->reset();
     is_game_over = false;
     paused = false;
@@ -75,11 +48,62 @@ void Game::reset()
     frameCount = 0;
 }
 
+void Game::display()
+{
+    calculateFPS();
+
+    char s [50];
+    sprintf(s, "FPS: %f", fps);
+
+    Point p;
+
+    p.x = -7.0f;
+    p.y = 0.5f;
+    p.z = 7.0f;
+    draw_text(s, p, 0.0f, 0.0f, 0.0f);
+
+    if (is_running)
+    {
+        scenario->set_camera();
+        scenario->draw_objects();
+
+        if (is_game_over)
+        {
+            if (wait())
+            {
+                p.x = -1.25f;
+                p.y = 0.5f;
+                p.z = 0.15f;
+                draw_text("GAME OVER", p, 0.0f, 0.0f, 0.0f);
+            }
+        }
+
+        sprintf(s, "SCORE: %d", score * 10);
+
+        p.x = 5.0f;
+        p.y = 0.5f;
+        p.z = -7.0f;
+
+        if (ate)
+        {
+            if (wait2())
+            {
+                draw_text(s, p, 0.0f, 0.0f, 0.0f);
+            }
+        }
+        else
+        {
+            draw_text(s, p, 0.0f, 0.0f, 0.0f);
+        }
+    }
+}
+
 void Game::run()
 {
     if (paused || is_game_over || !is_running) return;
 
     ObjectType o = scenario->has_collision(scenario->snake.head());
+    ate = false;
 
     switch (o)
     {
@@ -87,6 +111,8 @@ void Game::run()
             scenario->snake.move();
         break;
         case FOOD:
+            ate = true;
+            score++;
             scenario->change_food_pos();
             scenario->snake.grow();
             scenario->snake.move();
@@ -148,9 +174,17 @@ void Game::on_key_pressed(int key)
 
 bool Game::wait()
 {
-    bool wait = m > 0 && m < 30;
+    bool wait = m > 0 && m < to_fps(fps, 30);
     m++;
-    if (m > 30) m = -30;
+    if (m > to_fps(fps, 30)) m = -to_fps(fps, 30);
+    return wait;
+}
+
+bool Game::wait2()
+{
+    bool wait = m2 > 0 && m2 < to_fps(fps, 10);
+    m2++;
+    if (m2 > to_fps(fps, 10)) m2 = -to_fps(fps, 10);
     return wait;
 }
 

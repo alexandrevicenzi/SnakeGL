@@ -13,13 +13,16 @@ private:
     bool      is_game_over;
     bool      is_running;
     bool      paused;
-    Scenario* scenario;
-    int       m;
+    bool      ate;
+    int       m, m2;
     int       frameCount;
-    float     fps;
     int       currentTime;
     int       previousTime;
+    int       score;
+    float     fps;
+    Scenario* scenario;
     bool      wait();
+    bool      wait2();
     void      calculateFPS();
 public:
     Game();
