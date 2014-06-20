@@ -11,7 +11,7 @@
     #include <GL/glut.h>
 #endif
 
-#include "glut2.h"
+#include "glut_shapes.h"
 
 #include <deque>
 #include <iostream>
@@ -23,17 +23,28 @@
 using namespace std;
 
 // Objects can navigate from -5.0f to 5.0f.
-#define BOARD_SIZE  5.25f
+#define BOARD_SIZE      5.25f
 // Y axis difference. Ground to Objects.
-#define GROUND_DIFF 0.25f
+#define GROUND_DIFF     0.25f
 
 #define GROUND_TEXTURE  0
 #define FOOD_TEXTURE    1
 #define BARRIER_TEXTURE 2
 #define SNAKE_TEXTURE   3
 
-#define TEXTURE_COUNT 4
+#define TEXTURE_COUNT   4
 
+/* Key mappings. */
+#define KEY_CAMERA      32
+#define KEY_PAUSE       112
+#define KEY_QUIT        27
+#define KEY_SELECT      10
+#define KEY_START       115
+#define KEY_RESET       114
+#define KEY_UP          GLUT_KEY_UP
+#define KEY_DOWN        GLUT_KEY_DOWN
+#define KEY_RIGHT       GLUT_KEY_RIGHT
+#define KEY_LEFT        GLUT_KEY_LEFT
 
 GLuint textures[TEXTURE_COUNT];
 
@@ -75,12 +86,6 @@ inline Point random_point()
     p.x = random_pos();
     p.y = GROUND_DIFF;
     p.z = random_pos();
-
-#ifdef DEBUG
-    cout << "x = " << p.x << " ";
-    cout << "y = " << p.y << " ";
-    cout << "z = " << p.z << "\n";
-#endif
 
     return p;
 }
@@ -162,7 +167,7 @@ inline void draw_cube(float size, Point p, int res_id)
     glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, textures[res_id]);
         glTranslatef(p.x, p.y, p.z);
-        glutSolidCube2(size);
+        glut2SolidCube(size);
     glPopMatrix();
 
     disable_2D_texture();
@@ -177,7 +182,7 @@ inline void draw_sphere(float size, Point p, int res_id)
         glTranslatef(p.x, p.y, p.z);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
-        glutSolidSphere(size, 100.0f, 100.0f);
+        glut2SolidSphere(size, 100.0f, 100.0f);
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
     glPopMatrix();
@@ -185,30 +190,24 @@ inline void draw_sphere(float size, Point p, int res_id)
     disable_2D_texture();
 }
 
-void load_texture(/*int res_id, */const char* filename, int index)
-{
-    int width, height;
-    unsigned char* image;
-
-    //glActiveTexture(res_id);
-    glBindTexture(GL_TEXTURE_2D, textures[index]);
-
-    image = SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    SOIL_free_image_data(image);
-}
-
-void load_resources()
+inline void load_resources()
 {
     glGenTextures(TEXTURE_COUNT, textures);
 
-    load_texture(/*GL_TEXTURE0, */"./resources/grass.png", GROUND_TEXTURE);
-    load_texture(/*GL_TEXTURE1, */"./resources/apple.png", FOOD_TEXTURE);
-    load_texture(/*GL_TEXTURE2, */"./resources/box.png",   BARRIER_TEXTURE);
-    load_texture(/*GL_TEXTURE3, */"./resources/snake.png", SNAKE_TEXTURE);
+    glBindTexture(GL_TEXTURE_2D, textures[GROUND_TEXTURE]);
+    load_image("./resources/grass.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[FOOD_TEXTURE]);
+    load_image("./resources/apple.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[BARRIER_TEXTURE]);
+    load_image("./resources/box.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
+    load_image("./resources/snake.png");
 }
 
-void unload_resources()
+inline void unload_resources()
 {
     glDeleteTextures(TEXTURE_COUNT, textures);
 }

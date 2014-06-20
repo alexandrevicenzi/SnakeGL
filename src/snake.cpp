@@ -26,9 +26,6 @@ void Snake::reset()
 
 void Snake::move()
 {
-#ifdef DEBUG
-    cout << "walk\n";
-#endif
     points.pop_back();
     grow();
 }
@@ -44,10 +41,6 @@ void Snake::set_direction(int d)
     }
 
     direction = d;
-
-#ifdef DEBUG
-    cout << "direction = " << direction << "\n";
-#endif
 }
 
 void Snake::draw()
@@ -70,7 +63,7 @@ void Snake::draw()
 
         glPushMatrix();
             glTranslatef(p.x, p.y, p.z);
-            glutSolidCube2(0.5f);
+            glut2SolidCube(0.5f);
         glPopMatrix();
     }
 

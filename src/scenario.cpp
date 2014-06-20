@@ -156,10 +156,6 @@ void Scenario::change_camera_pos()
     {
         camera_mode = 0;
     }
-
-#ifdef DEBUG
-    cout << "camera = " << camera_mode << "\n";
-#endif
 }
 
 void Scenario::set_camera()

@@ -3,69 +3,32 @@
     #include "base.h"
 #endif
 
-#include "scenario.cpp"
-
 #ifndef _WIN32
     #include <unistd.h>
     #include <signal.h>
 #endif
 
-// Key mappings.
-#define KEY_ESCAPE 27
-#define KEY_SPACE  32
+#include "game.cpp"
 
 
-int width  = 600,//320,
-    height = 600;//240;
+int width  = 680,//320,
+    height = 680;//240;
 
 bool is_game_over = false,
      is_running   = false;
 
-Scenario* scenario = NULL;
+Game* game = NULL;
 
 void keyboard(unsigned char key, int x, int y)
 {
-    switch (key)
-    {
-        case KEY_ESCAPE:
-            exit(0);
-        break;
-        case KEY_SPACE:
-            scenario->change_camera_pos();
-            glutPostRedisplay();
-        break;
-        case 'R':
-        case 'r':
-            scenario->reset();
-            is_game_over = false;
-            is_running = true;
-        break;
-    }
+    game->on_key_pressed((int)key);
+    glutPostRedisplay();
 }
 
 void keyboardSpecial(int key, int x, int y)
 {
-    if (!is_running || is_game_over) return;
-
-    switch (key)
-    {
-        case GLUT_KEY_LEFT:
-            scenario->snake.set_direction(LEFT);
-            glutPostRedisplay();
-        break;
-        case GLUT_KEY_UP:
-            scenario->snake.set_direction(UP);
-            glutPostRedisplay();
-        break;
-        case GLUT_KEY_RIGHT:
-            scenario->snake.set_direction(RIGHT);
-            glutPostRedisplay();
-        break;
-        case GLUT_KEY_DOWN:
-            scenario->snake.set_direction(DOWN);
-            glutPostRedisplay();
-        break;
-    }
+    game->on_key_pressed((int)key);
+    glutPostRedisplay();
 }
 
 void init()
@@ -93,10 +56,9 @@ void init()
 #endif
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // Load just once. It's to slow to load an image.
     load_resources();
 
-    scenario = new Scenario();
+    game = new Game();
 }
 
 void display()
@@ -107,11 +69,7 @@ void display()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (is_running)
-    {
-        scenario->set_camera();
-        scenario->draw_objects();
-    }
+    game->display();
 
 #ifdef USE_BUFFERS
     glutSwapBuffers();
@@ -127,74 +85,16 @@ void resize(int w, int h)
     glLoadIdentity();*/
 }
 
-void game_over()
-{
-    cout << "collision\n";
-    is_game_over = true;
-    cout << "┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "███▀▀▀██┼███▀▀▀███┼███▀█▄█▀███┼██▀▀▀\n";
-    cout << "██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼█┼┼┼██┼██┼┼┼\n";
-    cout << "██┼┼┼▄▄▄┼██▄▄▄▄▄██┼██┼┼┼▀┼┼┼██┼██▀▀▀\n";
-    cout << "██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██┼┼┼\n";
-    cout << "███▄▄▄██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██▄▄▄\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "███▀▀▀███┼▀███┼┼██▀┼██▀▀▀┼██▀▀▀▀██▄┼\n";
-    cout << "██┼┼┼┼┼██┼┼┼██┼┼██┼┼██┼┼┼┼██┼┼┼┼┼██┼\n";
-    cout << "██┼┼┼┼┼██┼┼┼██┼┼██┼┼██▀▀▀┼██▄▄▄▄▄▀▀┼\n";
-    cout << "██┼┼┼┼┼██┼┼┼██┼┼█▀┼┼██┼┼┼┼██┼┼┼┼┼██┼\n";
-    cout << "███▄▄▄███┼┼┼─▀█▀┼┼─┼██▄▄▄┼██┼┼┼┼┼██▄\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼██┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼██┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼████▄┼┼┼▄▄▄▄▄▄▄┼┼┼▄████┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼▀▀█▄█████████▄█▀▀┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼█████████████┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼██▀▀▀███▀▀▀██┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼██┼┼┼███┼┼┼██┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼█████▀▄▀█████┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼┼███████████┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼▄▄▄██┼┼█▀█▀█┼┼██▄▄▄┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼▀▀██┼┼┼┼┼┼┼┼┼┼┼██▀▀┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼▀▀┼┼┼┼┼┼┼┼┼┼┼▀▀┼┼┼┼┼┼┼┼┼┼┼\n";
-    cout << "┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
-}
-
-void on_timer_func()
-{
-    if (is_running && !is_game_over)
-    {
-        ObjectType o = scenario->has_collision(scenario->snake.head());
-
-        switch (o)
-        {
-            case NONE:
-                scenario->snake.move();
-            break;
-            case FOOD:
-                scenario->change_food_pos();
-                scenario->snake.grow();
-                scenario->snake.move();
-            break;
-            case BARRIER:
-            case BOARD:
-            case SNAKE:
-                game_over();
-            break;
-            default:
-            break;
-        }
-    }
-}
-
 #ifndef _WIN32
     void on_timer(int sig)
     {
-        on_timer_func();
+        game->run();
         ualarm(500000, 0);
     }
 #else
     void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
     {
-        on_timer_func();
+        game->run();
     }
 #endif
 
@@ -206,14 +106,17 @@ int main(int argc, char** argv)
     signal(SIGALRM, on_timer);
     ualarm(500000, 0);
 #endif
+
     glutInit(&argc, argv);
+
 #ifdef USE_BUFFERS
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 #else
     glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 #endif
+
     glutInitWindowSize(width, height);
-    glutInitWindowPosition(100, 100);
+    glutInitWindowPosition(10, 10);
     glutCreateWindow("SnakeGL");
     glutDisplayFunc(display);
     glutIdleFunc(display);
@@ -222,8 +125,10 @@ int main(int argc, char** argv)
     glutSpecialFunc(keyboardSpecial);
     init();
     glutMainLoop();
+
 #ifdef _WIN32
     KillTimer(0, 1);
 #endif
+
     return 0;
 }
