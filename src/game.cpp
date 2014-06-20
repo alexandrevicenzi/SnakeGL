@@ -50,6 +50,11 @@ void Game::reset()
 
 void Game::display()
 {
+    int old_cam = scenario->camera_mode;
+
+    scenario->camera_mode = 3;
+    scenario->set_camera();
+
     calculateFPS();
     Point p;
 
@@ -65,8 +70,13 @@ void Game::display()
 
     if (is_running)
     {
+        scenario->camera_mode = old_cam;
         scenario->set_camera();
+
         scenario->draw_objects();
+
+        scenario->camera_mode = 3;
+        scenario->set_camera();
 
         if (is_game_over)
         {
@@ -97,6 +107,8 @@ void Game::display()
             draw_text(s, p, 0.0f, 0.0f, 0.0f);
         }
     }
+
+    scenario->camera_mode = old_cam;
 }
 
 void Game::run()

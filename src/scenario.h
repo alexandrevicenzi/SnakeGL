@@ -10,7 +10,6 @@ class Scenario
 private:
     Point food;
     vector<Point> barriers;
-    int camera_mode;
 
     double xEye, yEye, zEye;
     double xCenter, yCenter, zCenter;
@@ -20,6 +19,7 @@ private:
     void draw_food();
     void draw_barrier();
 public:
+    int camera_mode;
     Snake snake;
     Scenario();
     void add_barrier();
