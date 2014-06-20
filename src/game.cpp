@@ -20,6 +20,15 @@ void Game::display()
     {
         scenario->set_camera();
         scenario->draw_objects();
+
+        if (is_game_over)
+        {
+            Point p;
+            p.x = -1.25f;
+            p.y = 0.5f;
+            p.z = 0.0f;
+            draw_text("GAME OVER", p, 1.0f, 0.0f, 0.0f);
+        }
     }
 }
 
@@ -63,6 +72,10 @@ void Game::run()
             scenario->change_food_pos();
             scenario->snake.grow();
             scenario->snake.move();
+            if (scenario->snake.size() % 6 == 0)
+            {
+                scenario->add_barrier();
+            }
         break;
         case BARRIER:
         case BOARD:
@@ -79,6 +92,7 @@ void Game::on_key_pressed(int key)
     switch (key)
     {
         case KEY_CAMERA:
+            if (!is_running) return;
             scenario->change_camera_pos();
         break;
         case KEY_PAUSE:
@@ -96,15 +110,19 @@ void Game::on_key_pressed(int key)
             reset();
         break;
         case KEY_LEFT:
+            if (!is_running) return;
             scenario->snake.set_direction(LEFT);
         break;
         case KEY_UP:
+            if (!is_running) return;
             scenario->snake.set_direction(UP);
         break;
         case KEY_RIGHT:
+            if (!is_running) return;
             scenario->snake.set_direction(RIGHT);
         break;
         case KEY_DOWN:
+            if (!is_running) return;
             scenario->snake.set_direction(DOWN);
         break;
     }

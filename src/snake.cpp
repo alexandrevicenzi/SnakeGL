@@ -121,3 +121,8 @@ bool Snake::has_collision(Point p)
 
     return false;
 }
+
+int Snake::size()
+{
+    return points.size();
+}

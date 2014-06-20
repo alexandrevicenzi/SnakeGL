@@ -16,13 +16,13 @@ private:
     double xCenter, yCenter, zCenter;
     double xUp, yUp, zUp;
 
-    void add_barrier();
     void draw_axis();
     void draw_food();
     void draw_barrier();
 public:
     Snake snake;
     Scenario();
+    void add_barrier();
     void change_food_pos();
     void draw_board();
     void draw_objects();

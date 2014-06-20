@@ -16,6 +16,7 @@
 #include <deque>
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
 #include <vector>
 
 #include <SOIL/SOIL.h>
@@ -63,6 +64,14 @@ enum ObjectType
     FOOD    = 2,
     BARRIER = 3,
     BOARD   = 4,
+};
+
+enum Level
+{
+    VIRGIN       = 1,
+    JEDI         = 2,
+    ASIAN        = 3,
+    CHUCK_NORRIS = 4,
 };
 
 struct Point
@@ -206,4 +215,17 @@ inline void load_resources()
 inline void unload_resources()
 {
     glDeleteTextures(TEXTURE_COUNT, textures);
+}
+
+inline void draw_text(char* s, Point p, float r, float g, float b)
+{
+    int len, i;
+    glColor3f(r, g, b);
+    glRasterPos2f(p.x, p.z);
+    len = (int) strlen(s);
+
+    for (i = 0; i < len; i++)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, s[i]);
+    }
 }
