@@ -20,12 +20,14 @@ private:
     int       currentTime;
     int       previousTime;
     int       score;
+    int       tick;
     float     fps;
     Scenario* scenario;
     bool      wait();
     bool      wait2();
+    bool      clock();
     void      calculateFPS();
-    int       tick;
+    void      run();
 public:
     Game();
     ~Game();
@@ -34,7 +36,5 @@ public:
     void start();
     void stop();
     void reset();
-    void run();
     void on_key_pressed(int key);
-    bool clock();
 };
