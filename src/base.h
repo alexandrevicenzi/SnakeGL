@@ -1,5 +1,6 @@
 #if defined(__APPLE__) || defined(MACOSX)
     #include <OpenGL/gl.h>
+    #include <OpenGL/glx.h>
     #include <GLUT/glut.h>
 #elif defined(_WIN32) || defined(WIN32)
     #include <windows.h>
@@ -8,6 +9,7 @@
     #include <GL/glext.h>
 #else
     #include <GL/gl.h>
+    #include <GL/glx.h>
     #include <GL/glut.h>
 #endif
 
@@ -22,6 +24,17 @@
 #include <SOIL/SOIL.h>
 
 using namespace std;
+
+// https://github.com/AdrienHerubel/imgui/blob/master/lib/glew/glew.c
+#if defined(_WIN32)
+    #define glewGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
+#elif defined(__APPLE__)
+    #define glewGetProcAddress(name) NSGLGetProcAddress(name)
+#elif defined(__sgi) || defined(__sun)
+    #define glewGetProcAddress(name) dlGetProcAddress(name)
+#else /* __linux */
+    #define glewGetProcAddress(name) (*glXGetProcAddressARB)(name)
+#endif
 
 // Objects can navigate from -5.0f to 5.0f.
 #define BOARD_SIZE      5.25f
@@ -251,10 +264,27 @@ static void setVSync(bool sync)
     }
     else
     {
-        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
+        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
 
-        if( wglSwapIntervalEXT )
+        if(wglSwapIntervalEXT)
+        {
             wglSwapIntervalEXT(sync);
+        }
+    }
+#else
+    glewGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+    PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT = 0;
+
+    GLboolean r = GL_FALSE;
+    r = ((glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glewGetProcAddress((const GLubyte*)"glXSwapIntervalEXT")) == NULL) || r;
+
+    Display *dpy = glXGetCurrentDisplay();
+    GLXDrawable drawable = glXGetCurrentDrawable();
+
+    // TODO: not working.
+    if (r && glXSwapIntervalEXT)
+    {
+        glXSwapIntervalEXT(dpy, drawable, (int)sync);
     }
 #endif
 }
