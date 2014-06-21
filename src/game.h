@@ -25,6 +25,7 @@ private:
     bool      wait();
     bool      wait2();
     void      calculateFPS();
+    int       tick;
 public:
     Game();
     ~Game();
@@ -35,4 +36,5 @@ public:
     void reset();
     void run();
     void on_key_pressed(int key);
+    bool clock();
 };

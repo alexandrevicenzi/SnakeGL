@@ -3,11 +3,6 @@
     #include "base.h"
 #endif
 
-#ifndef _WIN32
-    #include <unistd.h>
-    #include <signal.h>
-#endif
-
 #include "game.cpp"
 
 
@@ -33,8 +28,6 @@ void keyboardSpecial(int key, int x, int y)
 
 void init()
 {
-    setVSync(true);
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     float pos_light[4] = { 5.0f, 5.0f, 10.0f, 0.0f };
@@ -87,27 +80,9 @@ void resize(int w, int h)
     glLoadIdentity();*/
 }
 
-#ifndef _WIN32
-    void on_timer(int sig)
-    {
-        game->run();
-        ualarm(500000, 0);
-    }
-#else
-    void __stdcall on_timer(HWND hwnd, UINT message, UINT idTimer, DWORD dwTime)
-    {
-        game->run();
-    }
-#endif
-
 int main(int argc, char** argv)
 {
-#ifdef _WIN32
-    SetTimer(0, 1, 500, (TIMERPROC) on_timer);
-#else
-    signal(SIGALRM, on_timer);
-    ualarm(500000, 0);
-#endif
+    setVSync(true);
 
     glutInit(&argc, argv);
 
@@ -127,10 +102,6 @@ int main(int argc, char** argv)
     glutSpecialFunc(keyboardSpecial);
     init();
     glutMainLoop();
-
-#ifdef _WIN32
-    KillTimer(0, 1);
-#endif
 
     return 0;
 }

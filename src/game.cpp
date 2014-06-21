@@ -37,15 +37,18 @@ void Game::stop()
 
 void Game::reset()
 {
+    m = to_fps(fps, 30);
+    m2 = to_fps(fps, 10);
+
     score = 0;
     ate = false;
-    m = to_fps(fps, 30);
-    m = to_fps(fps, 10);
-    scenario->reset();
     is_game_over = false;
     paused = false;
+
+    tick = 30;
+
+    scenario->reset();
     is_running = true;
-    frameCount = 0;
 }
 
 void Game::display()
@@ -77,6 +80,11 @@ void Game::display()
 
         scenario->camera_mode = 3;
         scenario->set_camera();
+
+        if (clock())
+        {
+            run();
+        }
 
         if (is_game_over)
         {
@@ -227,4 +235,12 @@ void Game::calculateFPS(void)
         //  Reset frame count
         frameCount = 0;
     }
+}
+
+bool Game::clock()
+{
+    tick++;
+    bool wait = tick < to_fps(fps, 30);
+    if (tick > to_fps(fps, 30)) tick = 0;
+    return !wait;
 }
