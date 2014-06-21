@@ -18,6 +18,7 @@ private:
     void draw_axis();
     void draw_food();
     void draw_barrier();
+    void draw_background();
 public:
     int camera_mode;
     Snake snake;

@@ -78,6 +78,7 @@ void resize(int w, int h)
     /*glViewport(0.0f, 0.0f, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();*/
+    glutPostRedisplay();
 }
 
 int main(int argc, char** argv)

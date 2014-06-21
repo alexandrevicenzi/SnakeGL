@@ -29,6 +29,7 @@ private:
     bool      clock();
     void      calculateFPS();
     void      run();
+    void      draw_menu();
 public:
     Game();
     ~Game();

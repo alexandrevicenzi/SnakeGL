@@ -52,6 +52,89 @@ void Game::reset()
     is_running = true;
 }
 
+void Game::draw_menu()
+{
+    enable_2D_texture();
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, textures[MENU_TEXTURE]);
+        glBegin(GL_QUADS);
+            glNormal3f(0.0, 1.0, 0.0);
+            glTexCoord2f(0, 1);
+            glVertex3f(-8, 0.0f,  8);
+            glTexCoord2f(1, 1);
+            glVertex3f( 8, 0.0f,  8);
+            glTexCoord2f(1, 0);
+            glVertex3f( 8, 0.0f, -8);
+            glTexCoord2f(0, 0);
+            glVertex3f(-8, 0.0f, -8);
+        glEnd();
+    glPopMatrix();
+    disable_2D_texture();
+
+    Point p;
+
+    p.x = -2.3f;
+    p.y = 0.5f;
+    p.z = -4.0f;
+    draw_text("SELECT YOUR LEVEL", p, 0.3f, 0.0f, 1.0f);
+
+    p.x = -1.0f;
+    p.y = 0.5f;
+    p.z = -2.0f;
+
+    if (level == VIRGIN)
+    {
+        p.x -= 0.3;
+        draw_text("< VIRGIN >", p, 1.0f, 0.0f, 0.0f);
+    }
+    else
+    {
+        draw_text("VIRGIN", p, 0.0f, 0.0f, 0.0f);
+    }
+
+    p.x = -0.7f;
+    p.y = 0.5f;
+    p.z = -1.0f;
+
+    if (level == JEDI)
+    {
+        p.x -= 0.3;
+        draw_text("< JEDI >", p, 1.0f, 0.0f, 0.0f);
+    }
+    else
+    {
+        draw_text("JEDI", p, 0.0f, 0.0f, 0.0f);
+    }
+
+    p.x = -0.85f;
+    p.y = 0.5f;
+    p.z = 0.0f;
+
+    if (level == ASIAN)
+    {
+        p.x -= 0.3;
+        draw_text("< ASIAN >", p, 1.0f, 0.0f, 0.0f);
+    }
+    else
+    {
+        draw_text("ASIAN", p, 0.0f, 0.0f, 0.0f);
+    }
+
+    p.x = -1.7f;
+    p.y = 0.5f;
+    p.z = 1.0f;
+
+    if (level == CHUCK_NORRIS)
+    {
+        p.x -= 0.3;
+        draw_text("< CHUCK NORRIS >", p, 1.0f, 0.0f, 0.0f);
+    }
+    else
+    {
+        draw_text("CHUCK NORRIS", p, 0.0f, 0.0f, 0.0f);
+    }
+}
+
 void Game::display()
 {
     int old_cam = scenario->camera_mode;
@@ -118,66 +201,7 @@ void Game::display()
     }
     else
     {
-        p.x = -2.3f;
-        p.y = 0.5f;
-        p.z = -5.0f;
-        draw_text("SELECT YOUR LEVEL", p, 0.3f, 0.0f, 1.0f);
-
-        p.x = -1.0f;
-        p.y = 0.5f;
-        p.z = -3.0f;
-
-        if (level == VIRGIN)
-        {
-            p.x -= 0.3;
-            draw_text("< VIRGIN >", p, 1.0f, 0.0f, 0.0f);
-        }
-        else
-        {
-            draw_text("VIRGIN", p, 0.0f, 0.0f, 0.0f);
-        }
-
-        p.x = -0.7f;
-        p.y = 0.5f;
-        p.z = -2.0f;
-
-        if (level == JEDI)
-        {
-            p.x -= 0.3;
-            draw_text("< JEDI >", p, 1.0f, 0.0f, 0.0f);
-        }
-        else
-        {
-            draw_text("JEDI", p, 0.0f, 0.0f, 0.0f);
-        }
-
-        p.x = -0.85f;
-        p.y = 0.5f;
-        p.z = -1.0f;
-
-        if (level == ASIAN)
-        {
-            p.x -= 0.3;
-            draw_text("< ASIAN >", p, 1.0f, 0.0f, 0.0f);
-        }
-        else
-        {
-            draw_text("ASIAN", p, 0.0f, 0.0f, 0.0f);
-        }
-
-        p.x = -1.7f;
-        p.y = 0.5f;
-        p.z = 0.0f;
-
-        if (level == CHUCK_NORRIS)
-        {
-            p.x -= 0.3;
-            draw_text("< CHUCK NORRIS >", p, 1.0f, 0.0f, 0.0f);
-        }
-        else
-        {
-            draw_text("CHUCK NORRIS", p, 0.0f, 0.0f, 0.0f);
-        }
+        draw_menu();
     }
 
     scenario->camera_mode = old_cam;

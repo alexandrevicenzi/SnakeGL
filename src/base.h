@@ -45,8 +45,10 @@ using namespace std;
 #define FOOD_TEXTURE    1
 #define BARRIER_TEXTURE 2
 #define SNAKE_TEXTURE   3
+#define DIRT_TEXTURE    4
+#define MENU_TEXTURE    5
 
-#define TEXTURE_COUNT   4
+#define TEXTURE_COUNT   6
 
 /* Key mappings. */
 #define KEY_CAMERA      32  // space
@@ -224,6 +226,12 @@ inline void load_resources()
 
     glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
     load_image("./resources/snake.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[DIRT_TEXTURE]);
+    load_image("./resources/dirt.jpg");
+
+    glBindTexture(GL_TEXTURE_2D, textures[MENU_TEXTURE]);
+    load_image("./resources/menu.png");
 }
 
 inline void unload_resources()

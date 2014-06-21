@@ -92,6 +92,26 @@ void Scenario::draw_board()
     disable_2D_texture();
 }
 
+void Scenario::draw_background()
+{
+    enable_2D_texture();
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, textures[DIRT_TEXTURE]);
+        glBegin(GL_QUADS);
+            glNormal3f(0.0, 1.0, 0.0);
+            glTexCoord2f(0, 0);
+            glVertex3f(-10, -0.2f,  10);
+            glTexCoord2f(1, 0);
+            glVertex3f( 10, -0.2f,  10);
+            glTexCoord2f(1, 1);
+            glVertex3f( 10, -0.2f, -10);
+            glTexCoord2f(0, 1);
+            glVertex3f(-10, -0.2f, -10);
+        glEnd();
+    glPopMatrix();
+    disable_2D_texture();
+}
+
 void Scenario::draw_food()
 {
     Point p = food;
@@ -112,6 +132,7 @@ void Scenario::draw_objects()
 #ifdef DEBUG
     draw_axis();
 #endif
+    //draw_background();
     draw_board();
     draw_food();
     draw_barrier();
