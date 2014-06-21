@@ -32,6 +32,8 @@ void Game::start()
 void Game::stop()
 {
     is_running = false;
+    is_game_over = false;
+    paused = false;
 }
 
 void Game::reset()
@@ -124,6 +126,7 @@ void Game::display()
         p.x = -1.0f;
         p.y = 0.5f;
         p.z = -3.0f;
+
         if (level == VIRGIN)
         {
             p.x -= 0.3;
@@ -196,12 +199,40 @@ void Game::run()
         case FOOD:
             ate = true;
             score++;
-            scenario->change_food_pos();
             scenario->snake.grow();
             scenario->snake.move();
-            if (scenario->snake.size() % 6 == 0)
+            scenario->change_food_pos();
+            switch (level)
             {
-                scenario->add_barrier();
+                case VIRGIN:
+                    if (scenario->snake.size() % 6 == 0)
+                    {
+                        scenario->add_barrier();
+                    }
+                break;
+                case JEDI:
+                    if (scenario->snake.size() % 4 == 0)
+                    {
+                        scenario->add_barrier();
+                    }
+                break;
+                case ASIAN:
+                    if (scenario->snake.size() % 4 == 0)
+                    {
+                        int v = random_range(1, 3);
+                        for (int i = 0; i < v; ++i)
+                        {
+                            scenario->add_barrier();
+                        }
+                    }
+                break;
+                case CHUCK_NORRIS:
+                    int v = random_range(1, 5);
+                    for (int i = 0; i < v; ++i)
+                    {
+                        scenario->add_barrier();
+                    }
+                break;
             }
         break;
         case BARRIER:
@@ -321,7 +352,7 @@ void Game::calculateFPS(void)
 
 bool Game::clock()
 {
-    tick++;
+    tick += level;
     bool wait = tick < to_fps(fps, 30);
     if (tick > to_fps(fps, 30)) tick = 0;
     return !wait;
