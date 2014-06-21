@@ -21,6 +21,7 @@ private:
     int       previousTime;
     int       score;
     int       tick;
+    int       level;
     float     fps;
     Scenario* scenario;
     bool      wait();

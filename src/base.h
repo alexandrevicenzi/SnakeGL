@@ -49,12 +49,13 @@ using namespace std;
 #define TEXTURE_COUNT   4
 
 /* Key mappings. */
-#define KEY_CAMERA      32
-#define KEY_PAUSE       112
-#define KEY_QUIT        27
-#define KEY_SELECT      10
-#define KEY_START       115
-#define KEY_RESET       114
+#define KEY_CAMERA      32  // space
+#define KEY_PAUSE       112 // p
+#define KEY_QUIT        27  // esc
+#define KEY_SELECT      13  // enter
+#define KEY_START       115 // s
+#define KEY_STOP        113 // q
+#define KEY_RESET       114 // r
 #define KEY_UP          GLUT_KEY_UP
 #define KEY_DOWN        GLUT_KEY_DOWN
 #define KEY_RIGHT       GLUT_KEY_RIGHT

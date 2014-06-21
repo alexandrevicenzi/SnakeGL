@@ -10,6 +10,7 @@ Game::Game()
     is_game_over = false;
     is_running = false;
     paused = false;
+    level = 1;
     scenario = new Scenario();
 }
 
@@ -25,9 +26,7 @@ void Game::pause()
 
 void Game::start()
 {
-    is_game_over = false;
     paused = false;
-    is_running = true;
 }
 
 void Game::stop()
@@ -115,6 +114,68 @@ void Game::display()
             draw_text(s, p, 0.0f, 0.0f, 0.0f);
         }
     }
+    else
+    {
+        p.x = -2.3f;
+        p.y = 0.5f;
+        p.z = -5.0f;
+        draw_text("SELECT YOUR LEVEL", p, 0.3f, 0.0f, 1.0f);
+
+        p.x = -1.0f;
+        p.y = 0.5f;
+        p.z = -3.0f;
+        if (level == VIRGIN)
+        {
+            p.x -= 0.3;
+            draw_text("< VIRGIN >", p, 1.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            draw_text("VIRGIN", p, 0.0f, 0.0f, 0.0f);
+        }
+
+        p.x = -0.7f;
+        p.y = 0.5f;
+        p.z = -2.0f;
+
+        if (level == JEDI)
+        {
+            p.x -= 0.3;
+            draw_text("< JEDI >", p, 1.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            draw_text("JEDI", p, 0.0f, 0.0f, 0.0f);
+        }
+
+        p.x = -0.85f;
+        p.y = 0.5f;
+        p.z = -1.0f;
+
+        if (level == ASIAN)
+        {
+            p.x -= 0.3;
+            draw_text("< ASIAN >", p, 1.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            draw_text("ASIAN", p, 0.0f, 0.0f, 0.0f);
+        }
+
+        p.x = -1.7f;
+        p.y = 0.5f;
+        p.z = 0.0f;
+
+        if (level == CHUCK_NORRIS)
+        {
+            p.x -= 0.3;
+            draw_text("< CHUCK NORRIS >", p, 1.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            draw_text("CHUCK NORRIS", p, 0.0f, 0.0f, 0.0f);
+        }
+    }
 
     scenario->camera_mode = old_cam;
 }
@@ -162,17 +223,25 @@ void Game::on_key_pressed(int key)
             scenario->change_camera_pos();
         break;
         case KEY_PAUSE:
+            if (!is_running) return;
             pause();
         break;
         case KEY_QUIT:
             exit(0);
         break;
         case KEY_SELECT:
+            reset();
         break;
         case KEY_START:
+            if (!paused) return;
             start();
         break;
+        case KEY_STOP:
+            if (!is_running) return;
+            stop();
+        break;
         case KEY_RESET:
+            if (!is_running) return;
             reset();
         break;
         case KEY_LEFT:
@@ -181,6 +250,11 @@ void Game::on_key_pressed(int key)
             key_pressed = true;
         break;
         case KEY_UP:
+            if (!is_running && !is_game_over)
+            {
+                level--;
+                if (level < 1) level = 4;
+            }
             if (!is_running || key_pressed) return;
             scenario->snake.set_direction(UP);
             key_pressed = true;
@@ -191,9 +265,17 @@ void Game::on_key_pressed(int key)
             key_pressed = true;
         break;
         case KEY_DOWN:
+            if (!is_running && !is_game_over)
+            {
+                level++;
+                if (level > 4) level = 1;
+            }
             if (!is_running || key_pressed) return;
             scenario->snake.set_direction(DOWN);
             key_pressed = true;
+        break;
+        default:
+            cout << "key = " << key << "\n";
         break;
     }
 }
