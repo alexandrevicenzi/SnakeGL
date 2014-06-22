@@ -3,6 +3,11 @@ SnakeGL
 
 Snake 3D game built using OpenGL and C++
 
+## Requirements
+
+- OpenGL (GL, GLU, GLUT)
+- SOIL
+
 #### Current stage
 
 ![screen][1]
