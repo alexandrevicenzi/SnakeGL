@@ -266,17 +266,22 @@ static void setVSync(bool sync)
 
     const char *extensions = (char*)glGetString( GL_EXTENSIONS );
 
-    if( strstr( extensions, "WGL_EXT_swap_control" ) == 0 )
+    if(extensions && strstr( extensions, "WGL_EXT_swap_control" ) == 0 )
     {
+        cout << "Can't enable vSync.";
         return;
     }
     else
     {
-        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
+        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
 
-        if(wglSwapIntervalEXT)
+        if( wglSwapIntervalEXT )
         {
             wglSwapIntervalEXT(sync);
+        }
+        else
+        {
+            cout << "Can't enable vSync.";
         }
     }
 #else
@@ -293,6 +298,10 @@ static void setVSync(bool sync)
     if (r && glXSwapIntervalEXT)
     {
         glXSwapIntervalEXT(dpy, drawable, (int)sync);
+    }
+    else
+    {
+        cout << "Can't enable vSync.";
     }
 #endif
 }
