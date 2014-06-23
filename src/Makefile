@@ -15,11 +15,11 @@ debug: clean snakedebug
 
 snakedebug:
 	$(info Compiling degug mode...)
-	g++ -g -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS)
+	g++ -g -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DDEBUG -DUSE_BUFFERS
 
 snake:
 	$(info Compiling...)
-	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DDEBUG -DUSE_BUFFERS
+	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DUSE_BUFFERS
 
 clean:
 	$(info Removing objects...)
