@@ -8,11 +8,17 @@ Snake 3D game built using OpenGL and C++
 - OpenGL (GL, GLU, GLUT)
 - SOIL
 
-#### Current stage
+#### Screenshots
 
 ![screen][1]
 
 ![screen][2]
 
-  [1]: http://i.imgur.com/KPREOfX.png
-  [2]: http://i.imgur.com/JoLz4oq.png
+![screen][3]
+
+![screen][4]
+
+  [1]: http://i.imgur.com/6rohrIe.png
+  [2]: http://i.imgur.com/RyzJjU9.png
+  [3]: http://i.imgur.com/TrheaFP.png
+  [4]: http://i.imgur.com/PhWfYWh.png
