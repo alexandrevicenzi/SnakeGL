@@ -7,10 +7,19 @@ Game::Game()
     fps = 60;
     currentTime = glutGet(GLUT_ELAPSED_TIME),
     previousTime = currentTime - 1001;
+
     is_game_over = false;
     is_running = false;
     paused = false;
+
     level = 1;
+
+    m = to_fps(fps, 30);
+    m2 = to_fps(fps, 10);
+
+    tick = 30;
+    tick2 = 10;
+
     scenario = new Scenario();
 }
 
@@ -47,6 +56,7 @@ void Game::reset()
     paused = false;
 
     tick = 30;
+    tick2 = 10;
 
     scenario->reset();
     is_running = true;
@@ -75,7 +85,7 @@ void Game::draw_menu()
 
     p.x = -2.3f;
     p.y = 0.5f;
-    p.z = -4.0f;
+    p.z = -3.5f;
     draw_text("SELECT YOUR LEVEL", p, 0.3f, 0.0f, 1.0f);
 
     p.x = -1.0f;
@@ -133,6 +143,14 @@ void Game::draw_menu()
     {
         draw_text("CHUCK NORRIS", p, 0.0f, 0.0f, 0.0f);
     }
+
+    if (wait())
+    {
+        p.x = -2.6f;
+        p.y = 0.5f;
+        p.z = 3.0f;
+        draw_text("PRESS ENTER TO START", p, 0.0f, .0f, 0.0f);
+    }
 }
 
 void Game::display()
@@ -147,7 +165,7 @@ void Game::display()
 
 #ifdef DEBUG
     char s [50];
-    sprintf(s, "FPS: %f", fps);
+    sprintf(s, "FPS: %.2f", fps);
 
     p.x = -7.0f;
     p.y = 0.5f;
@@ -160,7 +178,28 @@ void Game::display()
         scenario->camera_mode = old_cam;
         scenario->set_camera();
 
+        if (clock2())
+        {
+            if (scenario->a > 360)
+            {
+                scenario->a = 0;
+            }
+
+            scenario->a += 5;
+
+            if (scenario->m > 0.1f)
+            {
+                scenario->m = 0.0;
+            }
+
+            scenario->m += 0.05;
+        }
+
         scenario->draw_objects();
+
+
+        glColor3f(0.0f, 0.0f, 0.0f);
+        glRectf(0,0, 0.75f, -0.1f);
 
         scenario->camera_mode = 3;
         scenario->set_camera();
@@ -379,5 +418,13 @@ bool Game::clock()
     tick += level;
     bool wait = tick < to_fps(fps, 30);
     if (tick > to_fps(fps, 30)) tick = 0;
+    return !wait;
+}
+
+bool Game::clock2()
+{
+    tick2++;
+    bool wait = tick2 < to_fps(fps, 10);
+    if (tick2 > to_fps(fps, 10)) tick2 = 0;
     return !wait;
 }

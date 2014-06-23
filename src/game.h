@@ -21,12 +21,14 @@ private:
     int       previousTime;
     int       score;
     int       tick;
+    int       tick2;
     int       level;
     float     fps;
     Scenario* scenario;
     bool      wait();
     bool      wait2();
     bool      clock();
+    bool      clock2();
     void      calculateFPS();
     void      run();
     void      draw_menu();

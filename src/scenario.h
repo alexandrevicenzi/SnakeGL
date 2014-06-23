@@ -21,14 +21,16 @@ private:
     void draw_background();
 public:
     int camera_mode;
+    float m;
+    float a;
     Snake snake;
     Scenario();
     void add_barrier();
     void change_food_pos();
     void draw_board();
     void draw_objects();
-    ObjectType has_collision(Point p);
     void change_camera_pos();
     void set_camera();
     void reset();
+    ObjectType has_collision(Point p);
 };

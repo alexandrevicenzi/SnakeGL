@@ -45,8 +45,8 @@ using namespace std;
 #define FOOD_TEXTURE    1
 #define BARRIER_TEXTURE 2
 #define SNAKE_TEXTURE   3
-#define DIRT_TEXTURE    4
-#define MENU_TEXTURE    5
+#define MENU_TEXTURE    4
+#define BRICK_TEXTURE   5
 
 #define TEXTURE_COUNT   6
 
@@ -205,7 +205,6 @@ inline void draw_sphere(float size, Point p, int res_id)
         glTranslatef(p.x, p.y, p.z);
 
         glut2SolidSphere(size, 100.0f, 100.0f);
-
     glPopMatrix();
 
     disable_2D_texture();
@@ -227,11 +226,11 @@ inline void load_resources()
     glBindTexture(GL_TEXTURE_2D, textures[SNAKE_TEXTURE]);
     load_image("./resources/snake.png");
 
-    glBindTexture(GL_TEXTURE_2D, textures[DIRT_TEXTURE]);
-    load_image("./resources/dirt.jpg");
-
     glBindTexture(GL_TEXTURE_2D, textures[MENU_TEXTURE]);
     load_image("./resources/menu.png");
+
+    glBindTexture(GL_TEXTURE_2D, textures[BRICK_TEXTURE]);
+    load_image("./resources/brick.png");
 }
 
 inline void unload_resources()

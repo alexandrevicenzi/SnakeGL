@@ -10,6 +10,9 @@ Scenario::Scenario()
     xUp = 0.0f;
     yUp = 1.0f;
     zUp = 0.0f;
+
+    a = 0;
+    m = 0.1;
 }
 
 void Scenario::reset()
@@ -88,26 +91,35 @@ void Scenario::draw_board()
             glTexCoord2f(0, 1);
             glVertex3f(-BOARD_SIZE, 0.0f, -BOARD_SIZE);
         glEnd();
-    glPopMatrix();
-    disable_2D_texture();
-}
 
-void Scenario::draw_background()
-{
-    enable_2D_texture();
-    glPushMatrix();
-        glBindTexture(GL_TEXTURE_2D, textures[DIRT_TEXTURE]);
-        glBegin(GL_QUADS);
-            glNormal3f(0.0, 1.0, 0.0);
-            glTexCoord2f(0, 0);
-            glVertex3f(-10, -0.2f,  10);
-            glTexCoord2f(1, 0);
-            glVertex3f( 10, -0.2f,  10);
-            glTexCoord2f(1, 1);
-            glVertex3f( 10, -0.2f, -10);
-            glTexCoord2f(0, 1);
-            glVertex3f(-10, -0.2f, -10);
-        glEnd();
+        Point p;
+        float size = -BOARD_SIZE - 0.1f;
+        // Draw bordes. TODO: It's better use a rectangle.
+        while (size < BOARD_SIZE + 0.1f)
+        {
+            p.x = size;
+            p.y = 0.125f;
+            p.z = BOARD_SIZE + 0.125;
+            draw_cube(0.25f, p, BRICK_TEXTURE);
+
+            p.x = -BOARD_SIZE - 0.125;
+            p.y = 0.125f;
+            p.z = size;
+            draw_cube(0.25f, p, BRICK_TEXTURE);
+
+            p.x = BOARD_SIZE + 0.125;
+            p.y = 0.125f;
+            p.z = -size;
+            draw_cube(0.25f, p, BRICK_TEXTURE);
+
+            p.x = -size;
+            p.y = 0.125f;
+            p.z = -BOARD_SIZE - 0.125;
+            draw_cube(0.25f, p, BRICK_TEXTURE);
+
+            size += 0.25f;
+        }
+
     glPopMatrix();
     disable_2D_texture();
 }
@@ -115,7 +127,39 @@ void Scenario::draw_background()
 void Scenario::draw_food()
 {
     Point p = food;
-    draw_sphere(0.25f, p, FOOD_TEXTURE);
+    //draw_sphere(0.25f, p, FOOD_TEXTURE);
+
+    // "leaf"
+    glPushMatrix();
+        glTranslatef(p.x + 0.05, p.y + m + 0.25, p.z);
+        glRotatef(a, 0.0, 1.0, 0.0);
+
+        glColor3f(0.2f, 0.4f, 0.0f);
+        glLineWidth(3.5f);
+        glBegin(GL_LINE_STRIP);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0.1, -0.01, 0);
+            glVertex3f(0.1, -0.01, 0);
+            glVertex3f(0.15, -0.02, 0);
+            glVertex3f(0.15, -0.02, 0);
+            glVertex3f(0.20, -0.03, 0);
+            glVertex3f(0.20, -0.03, 0);
+            glVertex3f(0.25, -0.04, 0);
+            glVertex3f(0.25, -0.04, 0);
+        glEnd();
+    glPopMatrix();
+
+    enable_2D_texture();
+
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, textures[FOOD_TEXTURE]);
+        glTranslatef(p.x, p.y + m, p.z);
+        glRotatef(a, 0.0, 1.0, 0.0);
+        glut2SolidSphere(0.25f, 100.0f, 100.0f);
+    glPopMatrix();
+
+    disable_2D_texture();
 }
 
 void Scenario::draw_barrier()
@@ -132,7 +176,6 @@ void Scenario::draw_objects()
 #ifdef DEBUG
     draw_axis();
 #endif
-    //draw_background();
     draw_board();
     draw_food();
     draw_barrier();
@@ -193,6 +236,9 @@ void Scenario::set_camera()
     {
         gluPerspective(45, 1, 0.1f, 50);
         gluLookAt(0.0f, 10.0f, 15.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+
+        ////gluPerspective(45, 1, 1.0f, 50);
+        //gluLookAt(-2.0f, 5.0f, 20.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
     }
     else if (camera_mode == 1)
     {
