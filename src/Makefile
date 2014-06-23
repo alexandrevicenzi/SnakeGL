@@ -21,6 +21,10 @@ snake:
 	$(info Compiling...)
 	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS) -DUSE_BUFFERS
 
+nobuffer:
+	$(info Compiling...)
+	g++ -o snake$(EXT) main.cpp $< $(CVERSION) $(CFLAGS) $(GLFLAGS)
+
 clean:
 	$(info Removing objects...)
 	rm -f snake$(EXT)
