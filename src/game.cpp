@@ -1,12 +1,18 @@
 #include "game.h"
 
-#define to_fps(fps, value) value * fps / 60
+static float to_fps(float fps, int value)
+{
+    if (fps < 1)
+        fps = 60;
+    return value * fps / 60;
+}
 
 Game::Game()
 {
-    fps = 60;
-    currentTime = glutGet(GLUT_ELAPSED_TIME),
-    previousTime = currentTime - 1001;
+    fps = 0;
+    frameCount = 0;
+    currentTime = 0,
+    previousTime = 0;
 
     is_game_over = false;
     is_running = false;
