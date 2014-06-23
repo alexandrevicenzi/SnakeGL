@@ -7,10 +7,6 @@
 
 Scenario::Scenario()
 {
-    xUp = 0.0f;
-    yUp = 1.0f;
-    zUp = 0.0f;
-
     a = 0;
     m = 0.1;
 }
@@ -227,32 +223,75 @@ void Scenario::set_camera()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //gluPerspective(60, 1, 0.1, 100);
-    //gluLookAt(xEye, yEye, zEye, xCenter, yCenter, zCenter, xUp, yUp, zUp);
+
+    camera.upX    = 0.0f;
+    camera.upY    = 1.0f;
+    camera.upZ    = 0.0f;
+    camera.aspect = 1;
 
     if (camera_mode == 0)
     {
-        gluPerspective(45, 1, 0.1f, 50);
-        gluLookAt(0.0f, 10.0f, 15.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
-
-        ////gluPerspective(45, 1, 1.0f, 50);
-        //gluLookAt(-2.0f, 5.0f, 20.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+        camera.eyeX    = 0.0f;
+        camera.eyeY    = 10.0f;
+        camera.eyeZ    = 15.0f;
+        camera.centerX = 0.0f;
+        camera.centerY = 0.0f;
+        camera.centerZ = 0.0f;
+        camera.fovy    = 45;
+        camera.zNear   = 0.1f;
+        camera.zFar    = 50;
     }
     else if (camera_mode == 1)
     {
-        gluPerspective(45, 1, 0.1f, 50);
-        gluLookAt(0.0f, 1.0f, 20.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+        camera.eyeX    = 0.0f;
+        camera.eyeY    = 1.0f;
+        camera.eyeZ    = 20.0f;
+        camera.centerX = 0.0f;
+        camera.centerY = 0.0f;
+        camera.centerZ = 0.0f;
+        camera.fovy    = 45;
+        camera.zNear   = 0.1f;
+        camera.zFar    = 50;
     }
     else if (camera_mode == 2)
     {
-        gluPerspective(45, 1, 0.1f, 50);
-        gluLookAt(0.0f, -10.0f, 15.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+        #ifdef DEBUG
+            camera.eyeX    = 0.0f;
+            camera.eyeY    = -10.0f;
+            camera.eyeZ    = 15.0f;
+            camera.centerX = 0.0f;
+            camera.centerY = 0.0f;
+            camera.centerZ = 0.0f;
+            camera.fovy    = 45;
+            camera.zNear   = 0.1f;
+            camera.zFar    = 50;
+        #else
+            camera.eyeX    = -2.0f;
+            camera.eyeY    = 5.0f;
+            camera.eyeZ    = 20.0f;
+            camera.centerX = 0.0f;
+            camera.centerY = 0.0f;
+            camera.centerZ = 0.0f;
+            camera.fovy    = 45;
+            camera.zNear   = 1.0f;
+            camera.zFar    = 50;
+        #endif
     }
     else if (camera_mode == 3)
     {
-        gluPerspective(20, 1, 1, 100);
-        gluLookAt(0.0f, 45.0f, 1.0f, 0.0f, 0.0f, 0.0f, xUp, yUp, zUp);
+        camera.eyeX    = 0.0f;
+        camera.eyeY    = 45.0f;
+        camera.eyeZ    = 1.0f;
+        camera.centerX = 0.0f;
+        camera.centerY = 0.0f;
+        camera.centerZ = 0.0f;
+        camera.fovy    = 20;
+        camera.zNear   = 1.0f;
+        camera.zFar    = 100;
     }
+
+    gluPerspective(camera.fovy, camera.aspect, camera.zNear, camera.zFar);
+    gluLookAt(camera.eyeX, camera.eyeY, camera.eyeZ, camera.centerX, camera.centerY, camera.centerZ, camera.upX, camera.upY, camera.upZ);
 
     glMatrixMode(GL_MODELVIEW);
 }

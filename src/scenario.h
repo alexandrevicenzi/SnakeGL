@@ -10,11 +10,7 @@ class Scenario
 private:
     Point food;
     vector<Point> barriers;
-
-    double xEye, yEye, zEye;
-    double xCenter, yCenter, zCenter;
-    double xUp, yUp, zUp;
-
+    Camera camera;
     void draw_axis();
     void draw_food();
     void draw_barrier();

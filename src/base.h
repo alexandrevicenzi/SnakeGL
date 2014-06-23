@@ -95,6 +95,24 @@ struct Point
     float x, y, z;
 };
 
+struct Camera
+{
+    GLdouble eyeX, /* gluLookAt */
+             eyeY,
+             eyeZ,
+             centerX,
+             centerY,
+             centerZ,
+             upX,
+             upY,
+             upZ,
+             /* gluPerspective  */
+             fovy,
+             aspect,
+             zNear,
+             zFar;
+};
+
 inline int random_range(int min, int max)
 {
     return (rand() % (max + min)) + min;
