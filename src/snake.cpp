@@ -45,13 +45,12 @@ void Snake::set_direction(int d)
 
 void Snake::draw()
 {
-    Point h = points[0];
+     Point h = points[0];
 
     glColor3f(1.0, 1.0, 0.6);
     glPushMatrix();
         glTranslatef(h.x, h.y, h.z);
         glutSolidCube(0.5f);
-        //glutSolidSphere(0.5f, 100.0f, 100.0f);
     glPopMatrix();
 
     enable_2D_texture();
@@ -80,7 +79,7 @@ Point Snake::tail()
     return points[points.size() - 1];
 }
 
-void Snake::grow()
+void Snake::grow(bool back)
 {
     Point p;
     p.x = points[0].x;
@@ -103,7 +102,14 @@ void Snake::grow()
         break;
     }
 
-    points.push_front(p);
+    if (back)
+    {
+        points.push_back(p);
+    }
+    else
+    {
+        points.push_front(p);
+    }
 }
 
 bool Snake::has_collision(Point p)

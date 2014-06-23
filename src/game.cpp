@@ -175,6 +175,7 @@ void Game::display()
 
     if (is_running)
     {
+
         scenario->camera_mode = old_cam;
         scenario->set_camera();
 
@@ -196,7 +197,6 @@ void Game::display()
         }
 
         scenario->draw_objects();
-
 
         glColor3f(0.0f, 0.0f, 0.0f);
         glRectf(0,0, 0.75f, -0.1f);
@@ -262,7 +262,7 @@ void Game::run()
         case FOOD:
             ate = true;
             score++;
-            scenario->snake.grow();
+            scenario->snake.grow(true);
             scenario->snake.move();
             scenario->change_food_pos();
             switch (level)

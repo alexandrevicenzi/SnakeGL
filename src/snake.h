@@ -15,7 +15,7 @@ public:
     void  set_direction(int d);
     bool  has_collision(Point p);
     void  draw();
-    void  grow();
+    void  grow(bool back = false);
     Point head();
     Point tail();
     void  reset();
