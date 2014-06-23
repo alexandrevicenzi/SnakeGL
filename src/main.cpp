@@ -28,6 +28,9 @@ void keyboardSpecial(int key, int x, int y)
 
 void init()
 {
+    // Init GL before call this. Otherwise don't work.
+    setVSync(true);
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     float pos_light[4] = { 5.0f, 5.0f, 10.0f, 0.0f };
@@ -83,8 +86,6 @@ void resize(int w, int h)
 
 int main(int argc, char** argv)
 {
-    setVSync(true);
-
     glutInit(&argc, argv);
 
 #ifdef USE_BUFFERS
