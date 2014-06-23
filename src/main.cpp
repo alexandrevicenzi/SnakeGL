@@ -6,8 +6,8 @@
 #include "game.cpp"
 
 
-int width  = 680,
-    height = 680;
+int width  = 640,
+    height = 640;
 
 bool is_game_over = false,
      is_running   = false;
