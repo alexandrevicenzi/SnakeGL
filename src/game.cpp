@@ -163,8 +163,9 @@ void Game::display()
     calculateFPS();
     Point p;
 
-#ifdef DEBUG
     char s [50];
+
+#ifdef DEBUG
     sprintf(s, "FPS: %.2f", fps);
 
     p.x = -7.0f;
