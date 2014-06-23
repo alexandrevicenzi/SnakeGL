@@ -117,6 +117,22 @@ void APIENTRY glut2SolidCone(GLdouble base, GLdouble height, GLint slices, GLint
     gluCylinder(quadObj, base, 0.0, height, slices, stacks);
 }
 
+void APIENTRY glut2Cylinder(GLdouble base, GLdouble height, GLint slices, GLint stacks)
+{
+    QUAD_OBJ_INIT();
+    gluQuadricDrawStyle(quadObj, GLU_FILL);
+    gluQuadricNormals(quadObj, GLU_SMOOTH);
+    /* If we ever changed/used the texture or orientation state
+         of quadObj, we'd need to change it to the defaults here
+         with gluQuadricTexture and/or gluQuadricOrientation. */
+    gluDisk(quadObj, 0.0f, base, slices, 1);
+    gluCylinder(quadObj, base, base, height, slices, stacks);
+    glPushMatrix();
+        glTranslatef(0.0f, 0.0f, height);
+        gluDisk(quadObj, 0.0f, base, slices, 1);
+    glPopMatrix();
+}
+
 /* ENDCENTRY */
 static void drawBox(GLfloat size, GLenum type)
 {
