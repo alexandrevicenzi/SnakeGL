@@ -238,14 +238,14 @@ inline void unload_resources()
     glDeleteTextures(TEXTURE_COUNT, textures);
 }
 
-inline void draw_text(char* s, Point p, float r, float g, float b)
+inline void draw_text(string s, Point p, float r, float g, float b)
 {
     glDisable(GL_LIGHTING);
 
     int len, i;
     glColor3f(r, g, b);
     glRasterPos3f(p.x, p.y,p.z);
-    len = (int) strlen(s);
+    len = (int) s.length();
 
     for (i = 0; i < len; i++)
     {

@@ -29,8 +29,6 @@ void Scenario::add_barrier()
     Point p = random_point();
     bool b = false;
 
-    Point h = snake.head();
-
     while (b || has_collision(p) != NONE)
     {
         p = random_point();
