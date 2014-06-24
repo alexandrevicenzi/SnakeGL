@@ -422,7 +422,8 @@ void Game::calculateFPS(void)
 
 bool Game::clock()
 {
-    tick += level;
+    // Speed up every time grows.
+    tick += (level + (scenario->snake.size() / 10));
     bool wait = tick < to_fps(fps, 30);
     if (tick > to_fps(fps, 30)) tick = 0;
     return !wait;
