@@ -124,7 +124,7 @@ bool Snake::has_collision(Point p)
 
         if (p.x == b.x && p.z == b.z)
         {
-            return BARRIER;
+            return true;
         }
     }
 

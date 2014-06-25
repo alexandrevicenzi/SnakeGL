@@ -286,7 +286,7 @@ static void setVSync(bool sync)
 
     if(extensions && strstr( extensions, "WGL_EXT_swap_control" ) == 0 )
     {
-        cout << "Can't enable vSync.";
+        cout << "Can't enable vSync.\n";
         return;
     }
     else
@@ -299,7 +299,7 @@ static void setVSync(bool sync)
         }
         else
         {
-            cout << "Can't enable vSync.";
+            cout << "Can't enable vSync.\n";
         }
     }
 #else
@@ -319,7 +319,7 @@ static void setVSync(bool sync)
     }
     else
     {
-        cout << "Can't enable vSync.";
+        cout << "Can't enable vSync.\n";
     }
 #endif
 }
