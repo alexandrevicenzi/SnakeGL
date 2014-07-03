@@ -8,6 +8,15 @@ Snake 3D game built using OpenGL and C++
 - OpenGL (GL, GLU, GLUT)
 - SOIL
 
+## Controls
+
+- Space - Change Camera
+- P     - Pause
+- S     - Start
+- R     - Reset
+- Q     - Menu
+- Esc   - Quit
+
 #### Screenshots
 
 ![screen][1]
